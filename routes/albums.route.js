@@ -1,5 +1,6 @@
 const express = require("express");
 const albumsControllers = require("../controllers/products.controller");
+const adminHelper = require("../helpers/admin.helper");
 
 const albumsRouter = express.Router();
 
@@ -8,10 +9,10 @@ albumsRouter.get("/", albumsControllers.getAll);
 //get one - admin/user
 albumsRouter.get("/:id", albumsControllers.getOne);
 //post - admin
-albumsRouter.post("/", albumsControllers.add);
+albumsRouter.post("/", adminHelper.checkRole, albumsControllers.add);
 //put - admin
-albumsRouter.put("/:id", albumsControllers.update);
+albumsRouter.put("/:id", adminHelper.checkRole, albumsControllers.update);
 //delete - admin
-albumsRouter.delete("/:id", albumsControllers.deleteOne);
+albumsRouter.delete("/:id", adminHelper.checkRole, albumsControllers.deleteOne);
 
 module.exports = albumsRouter;
