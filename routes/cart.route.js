@@ -8,7 +8,7 @@ cartRouter.post("/", cartController.add);
 //delete - admin/user - delete cart
 cartRouter.delete("/:id", cartController.deleteOne);
 //get all - admin/user - get all products from cart
-//cartRouter.get("/:id/productos");
+cartRouter.get("/:id/productos", cartController.getAllProducts);
 //post - admin/user - add product to cart
 //cartRouter.post("/:id/productos");
 //delete - admin/user - delete product from cart

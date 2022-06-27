@@ -59,7 +59,29 @@ function deleteOne(request, response) {
   }
 }
 
+function getAllProducts(request, response) {
+  try {
+    const id = Number(request.params.id);
+    const cart = findById(id);
+    if (!cart) {
+      return response.status(404).json({
+        message: "Carrito no encontrado",
+      });
+    }
+    const { products } = cart;
+    response.status(200).json({
+      message: `Productos del carrito: ${id} encontrados con éxito`,
+      products,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al recuperar los productos del carrito",
+    });
+  }
+}
+
 module.exports = {
   add,
   deleteOne,
+  getAllProducts,
 };
