@@ -80,8 +80,57 @@ function getAllProducts(request, response) {
   }
 }
 
+function addOneProduct(request, response) {
+  try {
+    const cartId = Number(request.params.id);
+    const newAlbum = request.body;
+
+    const cart = findById(cartId);
+    cart.products.push(newAlbum);
+    writeFile(carts);
+
+    response.status(201).json({
+      message: `${newAlbum.name} agregado al carrito ${cartId} con éxito`,
+      cart,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al agregar un producto al carrito",
+    });
+  }
+}
+
+function deleteOneProduct(request, response) {
+  try {
+    const { id_cart, id_prod } = request.params;
+    const cartId = Number(id_cart);
+    const productId = Number(id_prod);
+    const cart = findById(cartId);
+
+    const productIndex = cart.products.findIndex(({ id }) => id === productId);
+
+    if (productIndex === -1) {
+      return response.status(200).json({
+        message: `El producto: ${id_prod} no existe en el carrito: ${id_cart}`,
+      });
+    }
+    cart.products.splice(productIndex, 1);
+
+    writeFile(carts);
+    response.status(200).json({
+      message: `Producto: ${id_prod} borrado del carrito: ${id_cart} con éxito`,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al borrar un producto del carrito",
+    });
+  }
+}
+
 module.exports = {
   add,
   deleteOne,
   getAllProducts,
+  addOneProduct,
+  deleteOneProduct,
 };

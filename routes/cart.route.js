@@ -10,8 +10,11 @@ cartRouter.delete("/:id", cartController.deleteOne);
 //get all - admin/user - get all products from cart
 cartRouter.get("/:id/productos", cartController.getAllProducts);
 //post - admin/user - add product to cart
-//cartRouter.post("/:id/productos");
+cartRouter.post("/:id/productos", cartController.addOneProduct);
 //delete - admin/user - delete product from cart
-//cartRouter.post("/:id/productos/:id_prod");
+cartRouter.delete(
+  "/:id_cart/productos/:id_prod",
+  cartController.deleteOneProduct
+);
 
 module.exports = cartRouter;
