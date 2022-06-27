@@ -5,6 +5,7 @@ const cartRouter = require(`${__dirname}/routes/cart.route`);
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+app.use(express.json());
 app.use("/api/productos", albumsRouter);
 app.use("/api/carrito", cartRouter);
 

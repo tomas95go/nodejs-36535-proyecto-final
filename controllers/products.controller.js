@@ -33,7 +33,33 @@ function getById(request, response) {
   }
 }
 
+function add(request, response) {
+  try {
+    const newAlbum = request.body;
+    newAlbum.id = autoIncrementId();
+    newAlbum.active = true;
+    response.status(201).json({
+      message: "Nuevo álbum creado con éxito",
+      newAlbum,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al crear el álbum",
+    });
+  }
+}
+
+function getMaxId() {
+  return Math.max(...albums.map(({ id }) => id + 1));
+}
+
+function autoIncrementId() {
+  const nextId = albums.length ? getMaxId() : 1;
+  return nextId;
+}
+
 module.exports = {
   getAll,
   getById,
+  add,
 };

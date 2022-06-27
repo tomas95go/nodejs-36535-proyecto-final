@@ -8,6 +8,7 @@ albumsRouter.get("/", albumsControllers.getAll);
 //get one - admin/user
 albumsRouter.get("/:id", albumsControllers.getById);
 //post - admin
+albumsRouter.post("/", albumsControllers.add);
 //put - admin
 //delete - admin
 
