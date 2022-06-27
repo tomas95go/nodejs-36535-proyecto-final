@@ -3,7 +3,7 @@ function checkRole(request, response, next) {
   if (!isAdmin) {
     return response.status(401).json({
       error: -1,
-      message: `Operación: ${request.method} no autorizada`,
+      message: `Operación: ${request.method} en ruta ${request.originalUrl} no autorizada`,
     });
   }
   next();
