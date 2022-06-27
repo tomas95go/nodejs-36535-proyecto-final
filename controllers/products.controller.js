@@ -13,10 +13,10 @@ function getAll(request, response) {
   }
 }
 
-function getById(request, response) {
+function getOne(request, response) {
   try {
     const id = Number(request.params.id);
-    const album = albums.find(({ id: albumid }) => albumid === id);
+    const album = findById(id);
     if (!album) {
       return response.status(404).json({
         message: "Álbum no encontrado",
@@ -58,8 +58,39 @@ function autoIncrementId() {
   return nextId;
 }
 
+function findById(id) {
+  const album = albums.find(({ id: albumid }) => albumid === id);
+  return album;
+}
+
+function update(request, response) {
+  try {
+    const id = Number(request.params.id);
+    const oldAlbum = findById(id);
+    if (!oldAlbum) {
+      return response.status(404).json({
+        message: "Álbum no encontrado",
+      });
+    }
+
+    const newAlbum = req.body;
+    newAlbum.id = oldAlbum.id;
+    newAlbum.active = oldAlbum.active;
+
+    response.status(200).json({
+      message: "Álbum modificado con éxito",
+      newAlbum,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al actualizar el álbum",
+    });
+  }
+}
+
 module.exports = {
   getAll,
-  getById,
+  getOne,
   add,
+  update,
 };
