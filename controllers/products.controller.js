@@ -33,7 +33,7 @@ function getOne(request, response) {
   }
 }
 
-function add(request, response) {
+function addOne(request, response) {
   try {
     const newAlbum = request.body;
     newAlbum.id = autoIncrementId();
@@ -52,6 +52,38 @@ function add(request, response) {
   }
 }
 
+function addMany(request, response) {
+  try {
+    const newAlbums = request.body;
+
+    newAlbums.forEach((newAlbum) => {
+      newAlbum.id = autoIncrementId();
+      newAlbum.active = true;
+      newAlbum.timestamp = new Date().toLocaleString("es-AR");
+      albums.push(newAlbum);
+    });
+
+    writeFile(albums);
+
+    let message = "";
+
+    if (newAlbums.length > 1) {
+      message = "Nuevos álbumes creados con éxito";
+    } else {
+      message = "Nuevo álbum creado con éxito";
+    }
+
+    response.status(201).json({
+      message,
+      albums,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al crear muchos álbumes",
+    });
+  }
+}
+
 function getMaxId() {
   return Math.max(...albums.map(({ id }) => id + 1));
 }
@@ -66,7 +98,7 @@ function findById(id) {
   return album;
 }
 
-function update(request, response) {
+function updateOne(request, response) {
   try {
     const id = Number(request.params.id);
     const oldAlbum = findById(id);
@@ -120,7 +152,8 @@ function deleteOne(request, response) {
 module.exports = {
   getAll,
   getOne,
-  add,
-  update,
+  addOne,
+  addMany,
+  updateOne,
   deleteOne,
 };

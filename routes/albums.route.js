@@ -9,9 +9,9 @@ albumsRouter.get("/", albumsControllers.getAll);
 //get one - admin/user
 albumsRouter.get("/:id", albumsControllers.getOne);
 //post - admin
-albumsRouter.post("/", adminHelper.checkRole, albumsControllers.add);
+albumsRouter.post("/", adminHelper.checkRole, albumsControllers.addMany);
 //put - admin
-albumsRouter.put("/:id", adminHelper.checkRole, albumsControllers.update);
+albumsRouter.put("/:id", adminHelper.checkRole, albumsControllers.updateOne);
 //delete - admin
 albumsRouter.delete("/:id", adminHelper.checkRole, albumsControllers.deleteOne);
 
