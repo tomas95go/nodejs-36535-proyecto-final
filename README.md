@@ -21,7 +21,7 @@ Por favor, leer antes de ejecutar.
 | POST   | http://localhost:8080/api/carrito                                    | Agrega carrito                  |
 | DELETE | http://localhost:8080/api/carrito/:id_carrito                        | Borrado (lógico) carrito        |
 | GET    | http://localhost:8080/api/carrito/:id_carrito/productos              | Listado de productos en carrito |
-| POST   | http://localhost:8080/api/carrito/:id_carrito/productos              | Agrega producto al carrito      |
+| POST   | http://localhost:8080/api/carrito/:id_carrito/productos              | Agrega productos al carrito     |
 | DELETE | http://localhost:8080/api/carrito/:id_carrito/productos/:id_producto | Borra un producto de un carrito |
 
 - Productos/REST:
@@ -30,7 +30,7 @@ Por favor, leer antes de ejecutar.
 | ------ | --------------------------------------- | ---------------------- |
 | GET    | http://localhost:8080/api/productos     | Listado de álbumes     |
 | GET    | http://localhost:8080/api/productos/:id | Álbum individual       |
-| POST   | http://localhost:8080/api/productos/    | Agrega álbum           |
+| POST   | http://localhost:8080/api/productos/    | Agrega álbumes         |
 | PUT    | http://localhost:8080/api/productos/:id | Actualiza álbum        |
 | DELETE | http://localhost:8080/api/productos/:id | Borrado (lógico) álbum |
 
@@ -50,14 +50,4 @@ Por favor, leer antes de ejecutar.
 
 ## Ejemplo para POST agregar producto a carrito
 
-{
-"name":"AmeriKKKa's Most Wanted",
-"description":"Ice Cube's album",
-"price":29.99,
-"code":1,
-"img":"https://i.discogs.com/ukKYqxz-LPzo4RXmvyOeRu4LtMzqtxzpCmwJ8chV1SQ/rs:fit/g:sm/q:90/h:500/w:500/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEyOTE1/Ny0xMTk1MzgyNDYz/LmpwZWc.jpeg",
-"stock":10,
-"id":1,
-"active":true,
-"timestamp":"27/6/2022 13:37:16"
-}
+[{"id": 1}, {"id": 2}]
