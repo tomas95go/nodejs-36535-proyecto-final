@@ -12,5 +12,6 @@ albumsRouter.post("/", albumsControllers.add);
 //put - admin
 albumsRouter.put("/:id", albumsControllers.update);
 //delete - admin
+albumsRouter.delete("/:id", albumsControllers.deleteOne);
 
 module.exports = albumsRouter;

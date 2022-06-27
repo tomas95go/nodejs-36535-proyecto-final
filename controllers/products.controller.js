@@ -88,9 +88,33 @@ function update(request, response) {
   }
 }
 
+function deleteOne(request, response) {
+  try {
+    const id = Number(request.params.id);
+    const album = findById(id);
+    if (!album) {
+      return response.status(404).json({
+        message: "Álbum no encontrado",
+      });
+    }
+
+    album.active = false;
+
+    response.status(200).json({
+      message: "Álbum borrado con éxito",
+      album,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al borrar el álbum",
+    });
+  }
+}
+
 module.exports = {
   getAll,
   getOne,
   add,
   update,
+  deleteOne,
 };
