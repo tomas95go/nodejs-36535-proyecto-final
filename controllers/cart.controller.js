@@ -100,6 +100,34 @@ function addOneProduct(request, response) {
   }
 }
 
+function addManyProducts(request, response) {
+  try {
+    const cartId = Number(request.params.id);
+    const newAlbums = request.body;
+
+    const cart = findById(cartId);
+    cart.products.push(...newAlbums);
+    writeFile(carts);
+
+    let message = "";
+
+    if (newAlbums.length > 1) {
+      message = `${newAlbums.length} productos agregados al carrito ${cartId} con éxito`;
+    } else {
+      message = `Producto agregado al carrito ${cartId} con éxito`;
+    }
+
+    response.status(201).json({
+      message,
+      cart,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al agregar productos al carrito",
+    });
+  }
+}
+
 function deleteOneProduct(request, response) {
   try {
     const { id_cart, id_prod } = request.params;
@@ -132,5 +160,6 @@ module.exports = {
   deleteOne,
   getAllProducts,
   addOneProduct,
+  addManyProducts,
   deleteOneProduct,
 };
