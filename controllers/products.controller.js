@@ -38,6 +38,7 @@ function add(request, response) {
     const newAlbum = request.body;
     newAlbum.id = autoIncrementId();
     newAlbum.active = true;
+    newAlbum.timestamp = new Date().toLocaleString("es-AR");
     albums.push(newAlbum);
     writeFile(albums);
     response.status(201).json({
