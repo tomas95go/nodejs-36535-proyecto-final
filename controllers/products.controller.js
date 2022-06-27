@@ -1,4 +1,4 @@
-const albums = require("../models/products.model");
+const { albums, writeFile } = require("../models/products.model");
 
 function getAll(request, response) {
   try {
@@ -38,6 +38,8 @@ function add(request, response) {
     const newAlbum = request.body;
     newAlbum.id = autoIncrementId();
     newAlbum.active = true;
+    albums.push(newAlbum);
+    writeFile(albums);
     response.status(201).json({
       message: "Nuevo álbum creado con éxito",
       newAlbum,
@@ -72,11 +74,13 @@ function update(request, response) {
         message: "Álbum no encontrado",
       });
     }
-
-    const newAlbum = req.body;
+    const oldAlbumIndex = albums.findIndex((album) => album.id === oldAlbum.id);
+    albums.splice(oldAlbumIndex, 1);
+    const newAlbum = request.body;
     newAlbum.id = oldAlbum.id;
     newAlbum.active = oldAlbum.active;
-
+    albums.push(newAlbum);
+    writeFile(albums);
     response.status(200).json({
       message: "Álbum modificado con éxito",
       newAlbum,
@@ -99,6 +103,7 @@ function deleteOne(request, response) {
     }
 
     album.active = false;
+    writeFile(albums);
 
     response.status(200).json({
       message: "Álbum borrado con éxito",
