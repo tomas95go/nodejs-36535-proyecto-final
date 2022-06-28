@@ -38,16 +38,20 @@ Por favor, leer antes de ejecutar.
 - Para probar que método/ruta no fue implementado, escribir: http://localhost:8080/api/product o similar, una ruta que no exista.
 
 ## Ejemplo para POST de producto
-
+```
 {
-"name": "AmeriKKKa's Most Wanted",
-"description": "Ice Cube's album",
-"price": 29.99,
-"code": 1,
-"img": "https://i.discogs.com/ukKYqxz-LPzo4RXmvyOeRu4LtMzqtxzpCmwJ8chV1SQ/rs:fit/g:sm/q:90/h:500/w:500/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEyOTE1/Ny0xMTk1MzgyNDYz/LmpwZWc.jpeg",
-"stock": 10
+    "name": "AmeriKKKa's Most Wanted",
+    "description": "Ice Cube's album",
+    "price": 29.99,
+    "code": 1,
+    "img": "https://i.discogs.com/ukKYqxz-LPzo4RXmvyOeRu4LtMzqtxzpCmwJ8chV1SQ/rs:fit/g:sm/q:90/h:500/w:500/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEyOTE1/Ny0xMTk1MzgyNDYz/LmpwZWc.jpeg",
+    "stock": 10
 }
-
+```
 ## Ejemplo para POST agregar producto a carrito
-
-[{"id": 1}, {"id": 2}]
+```
+[
+  {"id": 1},
+  {"id": 2}
+]
+```
