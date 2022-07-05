@@ -1,14 +1,16 @@
 const path = require("path");
 const engine = require(path.join(__dirname, "..", "helpers/engine.helper"));
-const databaseHelper = require(path.join(
+const databaseDAO = require(path.join(
   __dirname,
   "..",
-  `helpers/${engine}.helper`
+  `daos/products.dao.${engine}`
 ));
+
+const albums = [];
 
 function writeFile(content) {
   try {
-    databaseHelper.save(content);
+    databaseDAO.save(content);
   } catch (error) {
     return `Hubo un error al guardar en base de datos: ${error}`;
   }
