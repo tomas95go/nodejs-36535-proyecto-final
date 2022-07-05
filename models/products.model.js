@@ -1,14 +1,16 @@
-const fileHelper = require("../helpers/file.helpers");
-
-const filePath = "data/products.json";
-const encoding = "utf-8";
-const albums = fileHelper.getFileContent("data/products.json", "utf-8");
+const path = require("path");
+const engine = require(path.join(__dirname, "..", "helpers/engine.helper"));
+const databaseHelper = require(path.join(
+  __dirname,
+  "..",
+  `helpers/${engine}.helper`
+));
 
 function writeFile(content) {
   try {
-    fileHelper.writeFile(filePath, content);
+    databaseHelper.save(content);
   } catch (error) {
-    return `Hubo un error escribiendo el archivo: ${error}`;
+    return `Hubo un error al guardar en base de datos: ${error}`;
   }
 }
 
