@@ -9,7 +9,7 @@ productsRouter.get("/", productsController.getAll);
 //get one - admin/user
 productsRouter.get("/:id", productsController.getOne);
 //post - admin
-productsRouter.post("/", adminHelper.checkRole, productsController.addOne);
+productsRouter.post("/", adminHelper.checkRole, productsController.addMany);
 //put - admin
 /*productsRouter.put("/:id", adminHelper.checkRole, productsController.updateOne);
 //delete - admin

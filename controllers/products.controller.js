@@ -57,31 +57,36 @@ async function addOne(request, response) {
     });
   }
 }
-/*
-function addMany(request, response) {
-  try {
-    const newAlbums = request.body;
 
-    newAlbums.forEach((newAlbum) => {
-      newAlbum.id = autoIncrementId();
-      newAlbum.active = true;
-      newAlbum.timestamp = new Date().toLocaleString("es-AR");
-      albums.push(newAlbum);
+async function addMany(request, response) {
+  try {
+    const newProducts = request.body;
+
+    const addedProductsPromises = newProducts.map(async (newProduct) => {
+      newProduct.id = await autoIncrementId();
+      newProduct.active = true;
+      newProduct.timestamp = new Date().toLocaleString("es-AR");
+      const addedProduct = await productsDao.addOne(newProduct);
+      return addedProduct;
     });
 
-    writeFile(albums);
+    Promise.allSettled(addedProductsPromises).then((promiseResults) => {
+      const addedProducts = [];
+      promiseResults.forEach((promiseResult) =>
+        addedProducts.push(promiseResult.value)
+      );
+      let message = "";
 
-    let message = "";
+      if (addedProducts.length > 1) {
+        message = "Nuevos álbumes creados con éxito";
+      } else {
+        message = "Nuevo álbum creado con éxito";
+      }
 
-    if (newAlbums.length > 1) {
-      message = "Nuevos álbumes creados con éxito";
-    } else {
-      message = "Nuevo álbum creado con éxito";
-    }
-
-    response.status(201).json({
-      message,
-      albums,
+      response.status(201).json({
+        message,
+        addedProducts,
+      });
     });
   } catch (error) {
     response.status(404).json({
@@ -89,7 +94,7 @@ function addMany(request, response) {
     });
   }
 }
-*/
+
 async function autoIncrementId() {
   try {
     const products = await productsDao.getAll();
@@ -157,7 +162,7 @@ module.exports = {
   getAll,
   getOne,
   addOne,
-  /*addMany,
-  updateOne,
+  addMany,
+  /*updateOne,
   deleteOne,*/
 };
