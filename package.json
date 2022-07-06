@@ -4,10 +4,8 @@
   "description": "Proyecto final NodeJS de la comision 36535 de CoderHouse",
   "main": "server.js",
   "scripts": {
-    "start": "DB_ENGINE=mongo && node server.js",
-    "dev": "DB_ENGINE=mongo && nodemon server.js",
-    "start-windows": "set DB_ENGINE=mongo&& node server.js",
-    "dev-windows": "set DB_ENGINE=mongo&& nodemon server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
