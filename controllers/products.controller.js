@@ -1,10 +1,17 @@
-const { albums, writeFile } = require("../models/products.model");
+const path = require("path");
+const engine = require(path.join(__dirname, "..", "/helpers/engine.helper"));
+const productsDao = require(path.join(
+  __dirname,
+  "..",
+  `daos/products.dao.${engine}`
+));
 
-function getAll(request, response) {
+async function getAll(request, response) {
   try {
+    const products = await productsDao.getAll();
     response.status(200).json({
       message: "Lista de álbumes recuperada con éxito",
-      albums,
+      products,
     });
   } catch (error) {
     response.status(404).json({
@@ -13,7 +20,7 @@ function getAll(request, response) {
   }
 }
 
-function getOne(request, response) {
+/*function getOne(request, response) {
   try {
     const id = Number(request.params.id);
     const album = findById(id);
@@ -147,13 +154,13 @@ function deleteOne(request, response) {
       message: "Hubo un error al borrar el álbum",
     });
   }
-}
+}*/
 
 module.exports = {
   getAll,
-  getOne,
+  /*getOne,
   addOne,
   addMany,
   updateOne,
-  deleteOne,
+  deleteOne,*/
 };
