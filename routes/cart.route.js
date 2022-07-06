@@ -3,7 +3,7 @@ const cartController = require("../controllers/cart.controller");
 
 const cartRouter = express.Router();
 
-//post - admin/user - new cart
+/*//post - admin/user - new cart
 cartRouter.post("/", cartController.add);
 //delete - admin/user - delete cart
 cartRouter.delete("/:id", cartController.deleteOne);
@@ -15,6 +15,6 @@ cartRouter.post("/:id/productos", cartController.addManyProducts);
 cartRouter.delete(
   "/:id_cart/productos/:id_prod",
   cartController.deleteOneProduct
-);
+);*/
 
 module.exports = cartRouter;

@@ -1,4 +1,4 @@
-const { carts, writeFile } = require("../models/cart.model");
+/*const { carts, writeFile } = require("../models/cart.model");
 
 function add(request, response) {
   try {
@@ -162,4 +162,4 @@ module.exports = {
   addOneProduct,
   addManyProducts,
   deleteOneProduct,
-};
+};*/
