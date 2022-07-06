@@ -20,18 +20,18 @@ async function getAll(request, response) {
   }
 }
 
-/*function getOne(request, response) {
+async function getOne(request, response) {
   try {
     const id = Number(request.params.id);
-    const album = findById(id);
-    if (!album) {
+    const product = await productsDao.getOne(id);
+    if (!product) {
       return response.status(404).json({
         message: "Álbum no encontrado",
       });
     }
     response.status(200).json({
       message: "Álbum encontrado con éxito",
-      album,
+      product,
     });
   } catch (error) {
     response.status(404).json({
@@ -40,17 +40,16 @@ async function getAll(request, response) {
   }
 }
 
-function addOne(request, response) {
+async function addOne(request, response) {
   try {
-    const newAlbum = request.body;
-    newAlbum.id = autoIncrementId();
-    newAlbum.active = true;
-    newAlbum.timestamp = new Date().toLocaleString("es-AR");
-    albums.push(newAlbum);
-    writeFile(albums);
+    const newProduct = request.body;
+    newProduct.id = await autoIncrementId();
+    newProduct.active = true;
+    newProduct.timestamp = new Date().toLocaleString("es-AR");
+    const addedProduct = await productsDao.addOne(newProduct);
     response.status(201).json({
       message: "Nuevo álbum creado con éxito",
-      newAlbum,
+      addedProduct,
     });
   } catch (error) {
     response.status(404).json({
@@ -58,7 +57,7 @@ function addOne(request, response) {
     });
   }
 }
-
+/*
 function addMany(request, response) {
   try {
     const newAlbums = request.body;
@@ -90,21 +89,19 @@ function addMany(request, response) {
     });
   }
 }
-
-function getMaxId() {
-  return Math.max(...albums.map(({ id }) => id + 1));
+*/
+async function autoIncrementId() {
+  try {
+    const products = await productsDao.getAll();
+    const nextId = Math.max(...products.map(({ id }) => Number(id) + 1));
+    const id = products.length ? nextId : 1;
+    return id;
+  } catch (error) {
+    return `Hubo un error al incrementar el id del producto`;
+  }
 }
 
-function autoIncrementId() {
-  const nextId = albums.length ? getMaxId() : 1;
-  return nextId;
-}
-
-function findById(id) {
-  const album = albums.find(({ id: albumid }) => albumid === id);
-  return album;
-}
-
+/*
 function updateOne(request, response) {
   try {
     const id = Number(request.params.id);
@@ -158,9 +155,9 @@ function deleteOne(request, response) {
 
 module.exports = {
   getAll,
-  /*getOne,
+  getOne,
   addOne,
-  addMany,
+  /*addMany,
   updateOne,
   deleteOne,*/
 };
