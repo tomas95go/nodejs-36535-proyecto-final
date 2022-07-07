@@ -89,9 +89,27 @@ async function updateOne(id, newProduct) {
   }
 }
 
+async function deleteOne(id) {
+  try {
+    const softDeletedProduct = await Product.findByIdAndUpdate(
+      id,
+      {
+        active: false,
+      },
+      {
+        new: true,
+      }
+    );
+    return softDeletedProduct;
+  } catch (error) {
+    return "Hubo un error al borrar el producto";
+  }
+}
+
 module.exports = {
   getAll,
   getOne,
   addOne,
   updateOne,
+  deleteOne,
 };

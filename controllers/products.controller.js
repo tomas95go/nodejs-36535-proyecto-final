@@ -116,7 +116,6 @@ async function updateOne(request, response) {
         message: "Álbum no encontrado",
       });
     }
-    console.log(updatedProduct);
     response.status(200).json({
       message: "Álbum modificado con éxito",
       updatedProduct,
@@ -127,30 +126,26 @@ async function updateOne(request, response) {
     });
   }
 }
-/*
-function deleteOne(request, response) {
+
+async function deleteOne(request, response) {
   try {
     const id = Number(request.params.id);
-    const album = findById(id);
-    if (!album) {
+    const softDeletedProduct = await productsDao.deleteOne(id);
+    if (!softDeletedProduct) {
       return response.status(404).json({
         message: "Álbum no encontrado",
       });
     }
-
-    album.active = false;
-    writeFile(albums);
-
     response.status(200).json({
       message: "Álbum borrado con éxito",
-      album,
+      softDeletedProduct,
     });
   } catch (error) {
     response.status(404).json({
       message: "Hubo un error al borrar el álbum",
     });
   }
-}*/
+}
 
 module.exports = {
   getAll,
@@ -158,5 +153,5 @@ module.exports = {
   addOne,
   addMany,
   updateOne,
-  /*deleteOne,*/
+  deleteOne,
 };
