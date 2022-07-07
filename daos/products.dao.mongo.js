@@ -66,8 +66,32 @@ async function addOne(newProduct) {
   }
 }
 
+async function updateOne(id, newProduct) {
+  try {
+    const { name, description, price, code, img, stock } = newProduct;
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      {
+        name,
+        description,
+        price,
+        code,
+        img,
+        stock,
+      },
+      {
+        new: true,
+      }
+    );
+    return updatedProduct;
+  } catch (error) {
+    return "Hubo un error al actualizar el producto";
+  }
+}
+
 module.exports = {
   getAll,
   getOne,
   addOne,
+  updateOne,
 };

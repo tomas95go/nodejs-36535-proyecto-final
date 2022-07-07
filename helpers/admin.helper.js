@@ -1,5 +1,5 @@
 function checkRole(request, response, next) {
-  const isAdmin = false;
+  const isAdmin = true;
   if (!isAdmin) {
     return response.status(401).json({
       error: -1,

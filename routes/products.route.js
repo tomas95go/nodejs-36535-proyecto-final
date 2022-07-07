@@ -11,8 +11,8 @@ productsRouter.get("/:id", productsController.getOne);
 //post - admin
 productsRouter.post("/", adminHelper.checkRole, productsController.addMany);
 //put - admin
-/*productsRouter.put("/:id", adminHelper.checkRole, productsController.updateOne);
+productsRouter.put("/:id", adminHelper.checkRole, productsController.updateOne);
 //delete - admin
-productsRouter.delete("/:id", adminHelper.checkRole, productsController.deleteOne);*/
+/*productsRouter.delete("/:id", adminHelper.checkRole, productsController.deleteOne);*/
 
 module.exports = productsRouter;

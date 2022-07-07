@@ -106,26 +106,20 @@ async function autoIncrementId() {
   }
 }
 
-/*
-function updateOne(request, response) {
+async function updateOne(request, response) {
   try {
     const id = Number(request.params.id);
-    const oldAlbum = findById(id);
-    if (!oldAlbum) {
+    const newProductData = request.body;
+    const updatedProduct = await productsDao.updateOne(id, newProductData);
+    if (!updatedProduct) {
       return response.status(404).json({
         message: "Álbum no encontrado",
       });
     }
-    const oldAlbumIndex = albums.findIndex((album) => album.id === oldAlbum.id);
-    albums.splice(oldAlbumIndex, 1);
-    const newAlbum = request.body;
-    newAlbum.id = oldAlbum.id;
-    newAlbum.active = oldAlbum.active;
-    albums.push(newAlbum);
-    writeFile(albums);
+    console.log(updatedProduct);
     response.status(200).json({
       message: "Álbum modificado con éxito",
-      newAlbum,
+      updatedProduct,
     });
   } catch (error) {
     response.status(404).json({
@@ -133,7 +127,7 @@ function updateOne(request, response) {
     });
   }
 }
-
+/*
 function deleteOne(request, response) {
   try {
     const id = Number(request.params.id);
@@ -163,6 +157,6 @@ module.exports = {
   getOne,
   addOne,
   addMany,
-  /*updateOne,
-  deleteOne,*/
+  updateOne,
+  /*deleteOne,*/
 };
