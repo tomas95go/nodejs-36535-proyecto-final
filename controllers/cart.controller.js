@@ -1,18 +1,17 @@
-/*const { carts, writeFile } = require("../models/cart.model");
+const path = require("path");
+const engine = require(path.join(__dirname, "..", "/helpers/engine.helper"));
+const cartsDao = require(path.join(
+  __dirname,
+  "..",
+  `daos/carts.dao.${engine}`
+));
 
 function add(request, response) {
   try {
-    const newCart = {
-      id: autoIncrementId(),
-      products: [],
-      active: true,
-      timestamp: new Date().toLocaleString("es-AR"),
-    };
-    carts.push(newCart);
-    writeFile(carts);
+    const newCart = cartsDao.addOne();
     response.status(201).json({
       message: "Nuevo carrito creado con éxito",
-      carts,
+      newCart,
     });
   } catch (error) {
     response.status(404).json({
@@ -20,7 +19,7 @@ function add(request, response) {
     });
   }
 }
-
+/*
 function getMaxId() {
   return Math.max(...carts.map(({ id }) => id + 1));
 }
@@ -154,12 +153,13 @@ function deleteOneProduct(request, response) {
     });
   }
 }
+*/
 
 module.exports = {
-  add,
+  add /*
   deleteOne,
   getAllProducts,
   addOneProduct,
   addManyProducts,
-  deleteOneProduct,
-};*/
+  deleteOneProduct,*/,
+};
