@@ -1,6 +1,5 @@
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 
-async function getOne() {}
 async function addOne() {
   try {
     const db = getFirestore();
@@ -51,7 +50,6 @@ async function deleteOneProduct(idCart, idProduct) {
 }
 
 module.exports = {
-  getOne,
   addOne,
   deleteOne,
   addManyProducts,
