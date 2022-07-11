@@ -20,7 +20,16 @@ async function addOne() {
     throw "Hubo un error al agregar un nuevo carrito";
   }
 }
-async function deleteOne() {}
+async function deleteOne(id) {
+  try {
+    const db = getFirestore();
+    const cartRef = db.collection("carts").doc(id);
+    const cart = await cartRef.update({ active: false });
+    return cart;
+  } catch (error) {
+    throw "Hubo un error al agregar un nuevo carrito";
+  }
+}
 async function addManyProducts() {}
 async function deleteOneProduct() {}
 
