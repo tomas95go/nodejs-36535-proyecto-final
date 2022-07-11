@@ -48,8 +48,40 @@ async function deleteOne(id) {
   }
 }
 
+async function addManyProducts(id, products) {
+  try {
+    const updatedCart = await Cart.findByIdAndUpdate(
+      id,
+      { $push: { products: { $each: products } } },
+      {
+        new: true,
+      }
+    );
+    return updatedCart;
+  } catch (error) {
+    throw "Hubo un error al agregar porductos al carrito";
+  }
+}
+
+async function deleteOneProduct(cart_id, product_id) {
+  try {
+    const updatedCart = await Cart.findByIdAndUpdate(
+      cart_id,
+      { $pull: { products: { id: product_id } } },
+      {
+        new: true,
+      }
+    );
+    return updatedCart;
+  } catch (error) {
+    throw "Hubo un error al eliminar porductos del carrito";
+  }
+}
+
 module.exports = {
   addOne,
   getOne,
   deleteOne,
+  addManyProducts,
+  deleteOneProduct,
 };

@@ -61,42 +61,24 @@ async function getAllProducts(request, response) {
     });
   }
 }
-/*
-function addOneProduct(request, response) {
+async function addManyProducts(request, response) {
   try {
-    const cartId = Number(request.params.id);
-    const newAlbum = request.body;
-
-    const cart = findById(cartId);
-    cart.products.push(newAlbum);
-    writeFile(carts);
-
-    response.status(201).json({
-      message: `${newAlbum.name} agregado al carrito ${cartId} con éxito`,
-      cart,
-    });
-  } catch (error) {
-    response.status(404).json({
-      message: "Hubo un error al agregar un producto al carrito",
-    });
-  }
-}
-
-function addManyProducts(request, response) {
-  try {
-    const cartId = Number(request.params.id);
+    const id = request.params.id;
     const newAlbums = request.body;
+    const cart = await cartsDao.addManyProducts(id, newAlbums);
 
-    const cart = findById(cartId);
-    cart.products.push(...newAlbums);
-    writeFile(carts);
+    if (!cart) {
+      return response.status(404).json({
+        message: "Carrito no encontrado",
+      });
+    }
 
     let message = "";
 
     if (newAlbums.length > 1) {
-      message = `${newAlbums.length} productos agregados al carrito ${cartId} con éxito`;
+      message = `${newAlbums.length} productos agregados al carrito ${id} con éxito`;
     } else {
-      message = `Producto agregado al carrito ${cartId} con éxito`;
+      message = `Producto agregado al carrito ${id} con éxito`;
     }
 
     response.status(201).json({
@@ -109,24 +91,14 @@ function addManyProducts(request, response) {
     });
   }
 }
-
 function deleteOneProduct(request, response) {
   try {
     const { id_cart, id_prod } = request.params;
-    const cartId = Number(id_cart);
+    const cartId = id_cart;
     const productId = Number(id_prod);
-    const cart = findById(cartId);
 
-    const productIndex = cart.products.findIndex(({ id }) => id === productId);
+    cartsDao.deleteOneProduct(cartId, productId);
 
-    if (productIndex === -1) {
-      return response.status(200).json({
-        message: `El producto: ${id_prod} no existe en el carrito: ${id_cart}`,
-      });
-    }
-    cart.products.splice(productIndex, 1);
-
-    writeFile(carts);
     response.status(200).json({
       message: `Producto: ${id_prod} borrado del carrito: ${id_cart} con éxito`,
     });
@@ -136,13 +108,11 @@ function deleteOneProduct(request, response) {
     });
   }
 }
-*/
 
 module.exports = {
   add,
   deleteOne,
   getAllProducts,
-  /*addOneProduct,
   addManyProducts,
-  deleteOneProduct,*/
+  deleteOneProduct,
 };
