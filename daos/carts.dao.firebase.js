@@ -34,11 +34,21 @@ async function addManyProducts(id, products) {
     });
     return updatedCart;
   } catch (error) {
-    console.log(error);
     throw `Hubo un error al agregar productos al carrito`;
   }
 }
-async function deleteOneProduct() {}
+async function deleteOneProduct(idCart, idProduct) {
+  try {
+    const db = getFirestore();
+    const cartRef = db.collection("carts").doc(idCart);
+    const updatedCart = await cartRef.update({
+      products: FieldValue.arrayRemove({ id: idProduct }),
+    });
+    return updatedCart;
+  } catch (error) {
+    throw `Hubo un error al eliminar un producto del carrito`;
+  }
+}
 
 module.exports = {
   getOne,
