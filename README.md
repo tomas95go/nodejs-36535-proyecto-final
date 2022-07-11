@@ -8,10 +8,6 @@ Por favor, leer antes de ejecutar.
 2. Ejecutar "npm install" para instalar las dependecias.
 3. Ejecutar "npm start" o "npm run dev".
 
-## Como ejecutar el programa desde Glitch:
-
-- Probar los End Points listados abajo con Postman, Insomnia u otra herramienta similar reemplazando: http://localhost:8080 por https://grizzled-various-save.glitch.me/.
-
 ## Listado de los diferentes endpoints
 
 - Carritos/REST:
