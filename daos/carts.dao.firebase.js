@@ -1,9 +1,4 @@
-const { getFirestore } = require("firebase-admin/firestore");
-
-function getFirebaseApp() {
-  const db = getFirestore();
-  return db;
-}
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 
 async function getOne() {}
 async function addOne() {
@@ -30,7 +25,19 @@ async function deleteOne(id) {
     throw "Hubo un error al agregar un nuevo carrito";
   }
 }
-async function addManyProducts() {}
+async function addManyProducts(id, products) {
+  try {
+    const db = getFirestore();
+    const cartRef = db.collection("carts").doc(id);
+    const updatedCart = await cartRef.update({
+      products: FieldValue.arrayUnion(...products),
+    });
+    return updatedCart;
+  } catch (error) {
+    console.log(error);
+    throw `Hubo un error al agregar productos al carrito`;
+  }
+}
 async function deleteOneProduct() {}
 
 module.exports = {
