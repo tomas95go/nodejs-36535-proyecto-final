@@ -19,37 +19,19 @@ function add(request, response) {
     });
   }
 }
-/*
-function getMaxId() {
-  return Math.max(...carts.map(({ id }) => id + 1));
-}
 
-function autoIncrementId() {
-  const nextId = carts.length ? getMaxId() : 1;
-  return nextId;
-}
-
-function findById(id) {
-  const cart = carts.find(({ id: cartid }) => cartid === id);
-  return cart;
-}
-
-function deleteOne(request, response) {
+async function deleteOne(request, response) {
   try {
-    const id = Number(request.params.id);
-    const cart = findById(id);
+    const id = request.params.id;
+    const cart = await cartsDao.deleteOne(id);
     if (!cart) {
       return response.status(404).json({
         message: "Carrito no encontrado",
       });
     }
-
-    cart.active = false;
-    writeFile(carts);
-
     response.status(200).json({
       message: "Carrito borrado con éxito",
-      carts,
+      cart,
     });
   } catch (error) {
     response.status(404).json({
@@ -58,10 +40,11 @@ function deleteOne(request, response) {
   }
 }
 
-function getAllProducts(request, response) {
+async function getAllProducts(request, response) {
   try {
-    const id = Number(request.params.id);
-    const cart = findById(id);
+    const id = request.params.id;
+    const cart = await cartsDao.getOne(id);
+
     if (!cart) {
       return response.status(404).json({
         message: "Carrito no encontrado",
@@ -78,7 +61,7 @@ function getAllProducts(request, response) {
     });
   }
 }
-
+/*
 function addOneProduct(request, response) {
   try {
     const cartId = Number(request.params.id);
@@ -156,10 +139,10 @@ function deleteOneProduct(request, response) {
 */
 
 module.exports = {
-  add /*
+  add,
   deleteOne,
   getAllProducts,
-  addOneProduct,
+  /*addOneProduct,
   addManyProducts,
-  deleteOneProduct,*/,
+  deleteOneProduct,*/
 };

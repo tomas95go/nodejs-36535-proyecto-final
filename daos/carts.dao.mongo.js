@@ -22,6 +22,34 @@ function addOne() {
   }
 }
 
+async function getOne(id) {
+  try {
+    const cart = await Cart.findById(id);
+    return cart;
+  } catch (error) {
+    throw "Hubo un error al encontrar el carrito";
+  }
+}
+
+async function deleteOne(id) {
+  try {
+    const softDeletedCart = await Cart.findByIdAndUpdate(
+      id,
+      {
+        active: false,
+      },
+      {
+        new: true,
+      }
+    );
+    return softDeletedCart;
+  } catch (error) {
+    throw "Hubo un error al borrar el carrito";
+  }
+}
+
 module.exports = {
   addOne,
+  getOne,
+  deleteOne,
 };
