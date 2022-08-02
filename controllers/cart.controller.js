@@ -1,10 +1,5 @@
 const path = require("path");
-const engine = require(path.join(__dirname, "..", "/helpers/engine.helper"));
-const cartsDao = require(path.join(
-  __dirname,
-  "..",
-  `daos/carts.dao.${engine}`
-));
+const cartsDao = require(path.join(__dirname, "..", `daos/carts.dao`));
 
 function add(request, response) {
   try {

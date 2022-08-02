@@ -1,10 +1,5 @@
 const path = require("path");
-const engine = require(path.join(__dirname, "..", "/helpers/engine.helper"));
-const productsDao = require(path.join(
-  __dirname,
-  "..",
-  `daos/products.dao.${engine}`
-));
+const productsDao = require(path.join(__dirname, "..", `daos/products.dao`));
 
 async function getAll(request, response) {
   try {
@@ -22,7 +17,7 @@ async function getAll(request, response) {
 
 async function getOne(request, response) {
   try {
-    const id = Number(request.params.id);
+    const id = request.params.id;
     const product = await productsDao.getOne(id);
     if (!product) {
       return response.status(404).json({
@@ -43,7 +38,6 @@ async function getOne(request, response) {
 async function addOne(request, response) {
   try {
     const newProduct = request.body;
-    newProduct.id = await autoIncrementId();
     newProduct.active = true;
     newProduct.timestamp = new Date().toLocaleString("es-AR");
     const addedProduct = await productsDao.addOne(newProduct);
@@ -63,7 +57,6 @@ async function addMany(request, response) {
     const newProducts = request.body;
 
     const addedProductsPromises = newProducts.map(async (newProduct) => {
-      newProduct.id = await autoIncrementId();
       newProduct.active = true;
       newProduct.timestamp = new Date().toLocaleString("es-AR");
       const addedProduct = await productsDao.addOne(newProduct);
@@ -95,20 +88,9 @@ async function addMany(request, response) {
   }
 }
 
-async function autoIncrementId() {
-  try {
-    const products = await productsDao.getAll();
-    const nextId = Math.max(...products.map(({ id }) => Number(id) + 1));
-    const id = products.length ? nextId : 1;
-    return id;
-  } catch (error) {
-    return `Hubo un error al incrementar el id del producto`;
-  }
-}
-
 async function updateOne(request, response) {
   try {
-    const id = Number(request.params.id);
+    const id = request.params.id;
     const newProductData = request.body;
     const updatedProduct = await productsDao.updateOne(id, newProductData);
     if (!updatedProduct) {
@@ -129,7 +111,7 @@ async function updateOne(request, response) {
 
 async function deleteOne(request, response) {
   try {
-    const id = Number(request.params.id);
+    const id = request.params.id;
     const softDeletedProduct = await productsDao.deleteOne(id);
     if (!softDeletedProduct) {
       return response.status(404).json({

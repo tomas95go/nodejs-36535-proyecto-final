@@ -17,7 +17,5 @@ app.use(routeHelper.checkRoute);
 database.connect();
 
 app.listen(PORT, () => {
-  console.log(
-    `App running on port: ${PORT} with DB Engine: ${process.env.DB_ENGINE}. URL: http://localhost:${PORT}`
-  );
+  console.log(`App running on port: ${PORT}. URL: http://localhost:${PORT}`);
 });

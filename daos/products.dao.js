@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
-  _id: Number,
   name: String,
   description: String,
   price: Number,
@@ -34,20 +33,10 @@ async function getOne(id) {
 
 async function addOne(newProduct) {
   try {
-    const {
-      id,
-      name,
-      description,
-      price,
-      code,
-      img,
-      stock,
-      active,
-      timestamp,
-    } = newProduct;
+    const { name, description, price, code, img, stock, active, timestamp } =
+      newProduct;
 
     const product = new Product({
-      _id: id,
       name,
       description,
       price,
