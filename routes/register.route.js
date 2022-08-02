@@ -1,10 +1,12 @@
 const express = require("express");
+const path = require("path");
+const userController = require(path.join(
+  __dirname,
+  "..",
+  "controllers/user.controller"
+));
 const registerRouter = express.Router();
 
-registerRouter.get("/", (request, response) => {
-  response.status(200).json({
-    message: "Register router",
-  });
-});
+registerRouter.post("/", userController.register);
 
 module.exports = registerRouter;

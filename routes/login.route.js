@@ -1,10 +1,12 @@
 const express = require("express");
+const path = require("path");
+const userController = require(path.join(
+  __dirname,
+  "..",
+  "controllers/user.controller"
+));
 const loginRouter = express.Router();
 
-loginRouter.get("/", (request, response) => {
-  response.status(200).json({
-    message: "Login router",
-  });
-});
+loginRouter.get("/", userController.login);
 
 module.exports = loginRouter;
