@@ -17,9 +17,15 @@ async function register(request, response) {
 }
 
 function login(request, response) {
-  response.status(200).json({
-    message: "Login router",
-  });
+  try {
+    response.status(200).json({
+      message: "Usuario autenticado con éxito",
+    });
+  } catch (error) {
+    response.status(401).json({
+      message: "Usuario o contraseña no válida",
+    });
+  }
 }
 
 function logout(request, response) {

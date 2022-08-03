@@ -45,6 +45,28 @@ async function register(newUser) {
   }
 }
 
+async function findByEmail(email) {
+  try {
+    const user = await User.findOne({
+      email: email,
+    });
+    return user;
+  } catch (error) {
+    throw "Hubo un error al obtener usuario";
+  }
+}
+
+async function findById(id) {
+  try {
+    const user = await User.findById(id);
+    return user;
+  } catch (error) {
+    throw "Hubo un error al obtener usuario";
+  }
+}
+
 module.exports = {
   register,
+  findByEmail,
+  findById,
 };
