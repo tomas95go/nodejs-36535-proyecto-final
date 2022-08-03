@@ -27,10 +27,10 @@ function initialize(passport) {
       authenticateUser
     )
   );
-  passport.serializeUser((user, done) => done(null, user.id));
+  passport.serializeUser((user, done) => done(null, user._id));
 
   passport.deserializeUser((user, done) => {
-    return done(null, usersDao.findById(user.id));
+    return done(null, usersDao.findById(user._id));
   });
 }
 
