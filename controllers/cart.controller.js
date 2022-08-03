@@ -140,6 +140,10 @@ async function checkout(request, response) {
       </ul>
     </div>`
     );
+    await messageHelper.sendSMS(
+      `¡Gracias por comprar con nosotros, ${user.name}! Su pedido está siendo procesado`,
+      user.phone
+    );
     response.status(200).json({
       message: `Checkout realizado con éxito`,
       receipt: {

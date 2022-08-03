@@ -1,4 +1,7 @@
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 const sgMail = require("@sendgrid/mail");
+const twilio = require("twilio")(accountSid, authToken);
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function sendEmail(subject, message, html) {
@@ -19,8 +22,9 @@ async function sendEmail(subject, message, html) {
 async function sendSMS(message, number) {
   try {
     const newMessage = await twilio.messages.create({
-      from: process.env.PERSONAL_PHONE_NUMBER,
-      to: process.env.PERSONAL_PHONE_NUMBER,
+      body: message,
+      messagingServiceSid: process.env.PHONE_SID,
+      to: number,
     });
     return newMessage;
   } catch (error) {
