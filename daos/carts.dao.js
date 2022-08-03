@@ -1,17 +1,22 @@
 const mongoose = require("mongoose");
 
-const cartSchema = new mongoose.Schema({
-  products: [],
-  active: Boolean,
-  timestamp: String,
-});
+const cartSchema = new mongoose.Schema(
+  {
+    user: String,
+    products: [],
+    active: Boolean,
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const Cart = mongoose.model("Cart", cartSchema);
-function addOne() {
+function addOne(user) {
   try {
     const cart = new Cart({
+      user: user,
       active: true,
-      timestamp: new Date().toLocaleString("es-AR"),
     });
 
     cart.save();

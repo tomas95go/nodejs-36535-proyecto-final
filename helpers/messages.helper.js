@@ -1,26 +1,14 @@
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-async function sendEmail(newUser, subject, message) {
+async function sendEmail(subject, message, html) {
   try {
-    const { email, avatar, name, age, address, phone } = newUser;
     const msg = {
       to: process.env.PERSONAL_EMAIL,
       from: process.env.WORK_EMAIL,
       subject: subject,
       text: message,
-      html: `<div>
-      <h1>Alerta</h1>
-      <h2>Un usuario se ha registrado con los siguientes datos:</h2>
-        <ul>
-            <li>Email: ${email}</li>
-            <li>Avatar: <img src="${avatar}" alt="avatar" /></li>
-            <li>Nombre: ${name}</li>
-            <li>Edad: ${age}</li>
-            <li>Dirección: ${address}</li>
-            <li>Número de teléfono: ${phone}</li>
-        </ul>
-      </div>`,
+      html: html,
     };
     const sentEmail = await sgMail.send(msg);
     return sentEmail;

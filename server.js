@@ -11,6 +11,7 @@ const registerRouter = require(`${__dirname}/routes/register.route`);
 const loginRouter = require(`${__dirname}/routes/login.route`);
 const logoutRouter = require(`${__dirname}/routes/logout.route`);
 const routeHelper = require(`${__dirname}/helpers/route.helper`);
+const checkoutRouter = require(`${__dirname}/routes/checkout.route`);
 const database = require(path.join(__dirname, "/config"));
 
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api/login", loginRouter);
 app.use("/api/logout", logoutRouter);
 app.use("/api/productos", productsRouter);
 app.use("/api/carrito", cartsRouter);
+app.use("/api/checkout", checkoutRouter);
 app.use(routeHelper.checkRoute);
 
 database.connect();

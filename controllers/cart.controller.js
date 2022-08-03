@@ -1,9 +1,16 @@
 const path = require("path");
 const cartsDao = require(path.join(__dirname, "..", `daos/carts.dao`));
+const usersDao = require(path.join(__dirname, "..", `daos/users.dao`));
+const messageHelper = require(path.join(
+  __dirname,
+  "..",
+  "helpers/messages.helper"
+));
 
 function add(request, response) {
   try {
-    const newCart = cartsDao.addOne();
+    const { user } = request.body;
+    const newCart = cartsDao.addOne(user);
     response.status(201).json({
       message: "Nuevo carrito creado con éxito",
       newCart,
@@ -104,10 +111,54 @@ function deleteOneProduct(request, response) {
   }
 }
 
+async function checkout(request, response) {
+  try {
+    const id = request.params.id_cart;
+    const cart = await cartsDao.getOne(id);
+    const user = await usersDao.findByEmail(cart.user);
+    if (!cart) {
+      return response.status(404).json({
+        message: "Carrito no encontrado",
+      });
+    }
+    if (!user) {
+      return response.status(404).json({
+        message: "Usuario del carrito no encontrado",
+      });
+    }
+    const { products } = cart;
+    await messageHelper.sendEmail(
+      `Nuevo pedido de: ${user.name}. Tel: ${user.phone}`,
+      "Nueva compra",
+      `<div>
+    <h1>Nuevo pedido de: ${user.name}. Tel: ${user.phone}</h1>
+    <h2>Productos del carrito:</h2>
+      <ul>
+          ${products.map((product) => {
+            return `<li>Product: ${product.id}</li>`;
+          })}
+      </ul>
+    </div>`
+    );
+    response.status(200).json({
+      message: `Checkout realizado con éxito`,
+      receipt: {
+        user: user.email,
+        products,
+      },
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al realizar el checkout del carrito",
+    });
+  }
+}
+
 module.exports = {
   add,
   deleteOne,
   getAllProducts,
   addManyProducts,
   deleteOneProduct,
+  checkout,
 };
