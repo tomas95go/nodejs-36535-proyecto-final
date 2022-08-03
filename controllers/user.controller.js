@@ -1,10 +1,20 @@
 const path = require("path");
 const usersDao = require(path.join(__dirname, "..", "daos/users.dao"));
+const messageHelper = require(path.join(
+  __dirname,
+  "..",
+  "helpers/messages.helper"
+));
 
 async function register(request, response) {
   try {
     const newUser = request.body;
     const registeredUser = await usersDao.register(newUser);
+    const email = await messageHelper.sendEmail(
+      newUser,
+      "Nuevo registro",
+      "Gracias por registrarte"
+    );
     response.status(200).json({
       message: "Nuevo usuario registrado con éxito",
       registeredUser,
