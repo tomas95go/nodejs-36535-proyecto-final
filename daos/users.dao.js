@@ -1,4 +1,6 @@
+const path = require("path");
 const mongoose = require("mongoose");
+const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -41,6 +43,7 @@ async function register(newUser, userAvatarURL) {
 
     return registeredUser;
   } catch (error) {
+    logger.log("error", `Hubo un error al registrar el nuevo usuario ${error}`);
     throw "Hubo un error al registrar el nuevo usuario";
   }
 }
@@ -52,7 +55,8 @@ async function findByEmail(email) {
     });
     return user;
   } catch (error) {
-    throw "Hubo un error al obtener usuario";
+    logger.log("error", `Hubo un error al obtener usuario por email ${error}`);
+    throw "Hubo un error al obtener usuario por email";
   }
 }
 
@@ -61,7 +65,8 @@ async function findById(id) {
     const user = await User.findById(id);
     return user;
   } catch (error) {
-    throw "Hubo un error al obtener usuario";
+    logger.log("error", `Hubo un error al obtener usuario por id ${error}`);
+    throw "Hubo un error al obtener usuario por id";
   }
 }
 
