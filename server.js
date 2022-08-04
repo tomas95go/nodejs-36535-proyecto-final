@@ -2,6 +2,9 @@ const express = require("express");
 const path = require("path");
 const passport = require("passport");
 const session = require("express-session");
+const http = require("http");
+const cluster = require("cluster");
+const cpuQuantity = require("os").cpus().length;
 require("dotenv").config();
 
 const passportHelper = require(`${__dirname}/helpers/passport.helper`);
@@ -15,6 +18,7 @@ const checkoutRouter = require(`${__dirname}/routes/checkout.route`);
 const database = require(path.join(__dirname, "/config"));
 
 const app = express();
+const server = http.createServer(app);
 const PORT = process.env.PORT || 8080;
 app.use(express.static("public"));
 app.use(express.json());
@@ -38,6 +42,16 @@ app.use(routeHelper.checkRoute);
 
 database.connect();
 
-app.listen(PORT, () => {
-  console.log(`App running on port: ${PORT}. URL: http://localhost:${PORT}`);
-});
+if (cluster.isPrimary && process.env.CLUSTER_MODE) {
+  console.log("Inicializando en modo cluster");
+  for (let i = 0; i < cpuQuantity; i++) {
+    cluster.fork();
+  }
+  cluster.on("exit", (worker, code, signal) => {
+    console.log(`Worker: ${worker.process.pid} died`);
+  });
+} else {
+  server.listen(PORT, () => {
+    console.log(`App running on port: ${PORT}. URL: http://localhost:${PORT}`);
+  });
+}
