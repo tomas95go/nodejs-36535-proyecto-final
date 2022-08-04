@@ -43,3 +43,18 @@
   message: 'Operación: POST en ruta /api/checkout/62eadfdb6ff0984ca78b4bf2 no autorizada por falta de credenciales',
   timestamp: '2022-08-04 18:16:23'
 }
+{
+  level: 'warn',
+  message: 'Operación: GET en ruta /api/profile/tomas95go@gmail.com no autorizada por falta de credenciales',
+  timestamp: '2022-08-04 18:26:18'
+}
+{
+  level: 'warn',
+  message: 'Operación: GET en ruta /api/profile/tomas95go@gmail.com no autorizada por falta de credenciales',
+  timestamp: '2022-08-04 18:26:36'
+}
+{
+  level: 'warn',
+  message: 'Operación: GET en ruta /api/profile/tomas95go@gmail.com no autorizada por falta de credenciales',
+  timestamp: '2022-08-04 18:27:08'
+}

@@ -102,8 +102,36 @@ function logout(request, response) {
   }
 }
 
+async function getProfile(request, response) {
+  try {
+    const user = request.params;
+    const userFound = await usersDao.findByEmail(user.email);
+    const { email, avatar, name, age, address, phone } = userFound;
+    response.status(200).json({
+      message: "Perfil del usuario obtenido con éxito",
+      profile: {
+        email,
+        avatar,
+        name,
+        age,
+        address,
+        phone,
+      },
+    });
+  } catch (error) {
+    logger.log(
+      "error",
+      `Ocurrió un error al obtener el perfil del usuario ${error}`
+    );
+    response.status(404).json({
+      message: `Ocurrió un error al obtener el perfil del usuario ${error}`,
+    });
+  }
+}
+
 module.exports = {
   register,
   login,
   logout,
+  getProfile,
 };
