@@ -29,6 +29,17 @@ async function getUserDirectory(user) {
   }
 }
 
+async function getUserRelativeDirectory(user) {
+  try {
+    const userDirectory = await getUserDirectory(user);
+    const userDirectoryContent = await fs.promises.readdir(userDirectory);
+    const userRelativeDirectory = `${process.env.LOCAL_BASE_URL}/storage/users/${user}/${userDirectoryContent[0]}`;
+    return userRelativeDirectory;
+  } catch (error) {
+    throw `Hubo un error al obtener la carpeta del usuario`;
+  }
+}
+
 async function save(user, img) {
   try {
     const userDirectory = await getUserDirectory(user);
@@ -42,7 +53,7 @@ async function save(user, img) {
 }
 
 module.exports = {
-  getUserDirectory,
+  getUserRelativeDirectory,
   createDirectory,
   save,
 };

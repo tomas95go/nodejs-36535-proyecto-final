@@ -19,7 +19,7 @@ async function store(img, user) {
 
 async function getUserAvatarURL(user) {
   try {
-    const userDirectory = await fileHelper.getUserDirectory(user);
+    const userDirectory = await fileHelper.getUserRelativeDirectory(user);
     return userDirectory;
   } catch (error) {
     throw `Hubo un error al obtener la carpeta del usuario`;
