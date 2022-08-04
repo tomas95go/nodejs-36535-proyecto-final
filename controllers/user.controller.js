@@ -57,8 +57,17 @@ async function register(request, response) {
 
 function login(request, response) {
   try {
-    response.status(200).json({
-      message: "Usuario autenticado con éxito",
+    request.session.save((err) => {
+      if (err) {
+        logger.log("error", `Hubo un error al guardar la sessio ${err}`);
+        return response.status(404).json({
+          message: "Hubo un error al guardar la session",
+        });
+      }
+
+      response.status(200).json({
+        message: "Usuario autenticado con éxito",
+      });
     });
   } catch (error) {
     logger.log("error", `Usuario o contraseña no válida ${error}`);
@@ -69,9 +78,28 @@ function login(request, response) {
 }
 
 function logout(request, response) {
-  response.status(200).json({
-    message: "Logout router",
-  });
+  try {
+    request.session.destroy(function (err) {
+      if (err) {
+        logger.log(
+          "error",
+          `Error al realizar al destruir la session ${error}`
+        );
+        return response.status(404).json({
+          message: "Error al realizar al destruir la session",
+        });
+      }
+
+      response.status(200).json({
+        message: "Sesión terminada con éxito",
+      });
+    });
+  } catch (error) {
+    logger.log("error", `Error al realizar el logout ${error}`);
+    response.status(401).json({
+      message: "Error al realizar el logout",
+    });
+  }
 }
 
 module.exports = {
