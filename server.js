@@ -16,6 +16,7 @@ const database = require(path.join(__dirname, "/config"));
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+app.use(express.static("public"));
 app.use(express.json());
 passportHelper.initialize(passport);
 app.use(
