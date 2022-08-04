@@ -8,10 +8,6 @@ Por favor, leer antes de ejecutar.
 2. Ejecutar "npm install" para instalar las dependecias.
 3. Ejecutar "npm start" o "npm run dev".
 
-## Como ejecutar el programa desde Glitch:
-
-- Probar los End Points listados abajo con Postman, Insomnia u otra herramienta similar reemplazando: http://localhost:8080 por https://grizzled-various-save.glitch.me/.
-
 ## Listado de los diferentes endpoints
 
 - Carritos/REST:
@@ -36,22 +32,3 @@ Por favor, leer antes de ejecutar.
 
 - Para probar los accesos de ADMIN cambiar la variable isAdmin en helpers/admin.helper.js de TRUE a FALSE o viceversa.
 - Para probar que método/ruta no fue implementado, escribir: http://localhost:8080/api/product o similar, una ruta que no exista.
-
-## Ejemplo para POST de producto
-```
-{
-    "name": "AmeriKKKa's Most Wanted",
-    "description": "Ice Cube's album",
-    "price": 29.99,
-    "code": 1,
-    "img": "https://i.discogs.com/ukKYqxz-LPzo4RXmvyOeRu4LtMzqtxzpCmwJ8chV1SQ/rs:fit/g:sm/q:90/h:500/w:500/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEyOTE1/Ny0xMTk1MzgyNDYz/LmpwZWc.jpeg",
-    "stock": 10
-}
-```
-## Ejemplo para POST agregar producto a carrito
-```
-[
-  {"id": 1},
-  {"id": 2}
-]
-```

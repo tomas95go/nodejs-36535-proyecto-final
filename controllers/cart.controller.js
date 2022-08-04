@@ -1,68 +1,55 @@
-const { carts, writeFile } = require("../models/cart.model");
+const path = require("path");
+const cartsDao = require(path.join(__dirname, "..", `daos/carts.dao`));
+const usersDao = require(path.join(__dirname, "..", `daos/users.dao`));
+const messageHelper = require(path.join(
+  __dirname,
+  "..",
+  "helpers/messages.helper"
+));
+const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
 
 function add(request, response) {
   try {
-    const newCart = {
-      id: autoIncrementId(),
-      products: [],
-      active: true,
-      timestamp: new Date().toLocaleString("es-AR"),
-    };
-    carts.push(newCart);
-    writeFile(carts);
+    const { user } = request.body;
+    const newCart = cartsDao.addOne(user);
     response.status(201).json({
       message: "Nuevo carrito creado con éxito",
-      carts,
+      newCart,
     });
   } catch (error) {
+    logger.log("error", `Hubo un error al crear el carrito ${error}`);
     response.status(404).json({
       message: "Hubo un error al crear el carrito",
     });
   }
 }
 
-function getMaxId() {
-  return Math.max(...carts.map(({ id }) => id + 1));
-}
-
-function autoIncrementId() {
-  const nextId = carts.length ? getMaxId() : 1;
-  return nextId;
-}
-
-function findById(id) {
-  const cart = carts.find(({ id: cartid }) => cartid === id);
-  return cart;
-}
-
-function deleteOne(request, response) {
+async function deleteOne(request, response) {
   try {
-    const id = Number(request.params.id);
-    const cart = findById(id);
+    const id = request.params.id;
+    const cart = await cartsDao.deleteOne(id);
     if (!cart) {
       return response.status(404).json({
         message: "Carrito no encontrado",
       });
     }
-
-    cart.active = false;
-    writeFile(carts);
-
     response.status(200).json({
       message: "Carrito borrado con éxito",
-      carts,
+      cart,
     });
   } catch (error) {
+    logger.log("error", `Hubo un error al borrar el carrito ${error}`);
     response.status(404).json({
       message: "Hubo un error al borrar el carrito",
     });
   }
 }
 
-function getAllProducts(request, response) {
+async function getAllProducts(request, response) {
   try {
-    const id = Number(request.params.id);
-    const cart = findById(id);
+    const id = request.params.id;
+    const cart = await cartsDao.getOne(id);
+
     if (!cart) {
       return response.status(404).json({
         message: "Carrito no encontrado",
@@ -74,47 +61,33 @@ function getAllProducts(request, response) {
       products,
     });
   } catch (error) {
+    logger.log(
+      "error",
+      `Hubo un error al recuperar los productos del carrito ${error}`
+    );
     response.status(404).json({
       message: "Hubo un error al recuperar los productos del carrito",
     });
   }
 }
-
-function addOneProduct(request, response) {
+async function addManyProducts(request, response) {
   try {
-    const cartId = Number(request.params.id);
-    const newAlbum = request.body;
-
-    const cart = findById(cartId);
-    cart.products.push(newAlbum);
-    writeFile(carts);
-
-    response.status(201).json({
-      message: `${newAlbum.name} agregado al carrito ${cartId} con éxito`,
-      cart,
-    });
-  } catch (error) {
-    response.status(404).json({
-      message: "Hubo un error al agregar un producto al carrito",
-    });
-  }
-}
-
-function addManyProducts(request, response) {
-  try {
-    const cartId = Number(request.params.id);
+    const id = request.params.id;
     const newAlbums = request.body;
+    const cart = await cartsDao.addManyProducts(id, newAlbums);
 
-    const cart = findById(cartId);
-    cart.products.push(...newAlbums);
-    writeFile(carts);
+    if (!cart) {
+      return response.status(404).json({
+        message: "Carrito no encontrado",
+      });
+    }
 
     let message = "";
 
     if (newAlbums.length > 1) {
-      message = `${newAlbums.length} productos agregados al carrito ${cartId} con éxito`;
+      message = `${newAlbums.length} productos agregados al carrito ${id} con éxito`;
     } else {
-      message = `Producto agregado al carrito ${cartId} con éxito`;
+      message = `Producto agregado al carrito ${id} con éxito`;
     }
 
     response.status(201).json({
@@ -122,35 +95,84 @@ function addManyProducts(request, response) {
       cart,
     });
   } catch (error) {
+    logger.log(
+      "error",
+      `Hubo un error al agregar productos al carrito ${error}`
+    );
     response.status(404).json({
       message: "Hubo un error al agregar productos al carrito",
     });
   }
 }
-
 function deleteOneProduct(request, response) {
   try {
     const { id_cart, id_prod } = request.params;
-    const cartId = Number(id_cart);
+    const cartId = id_cart;
     const productId = Number(id_prod);
-    const cart = findById(cartId);
 
-    const productIndex = cart.products.findIndex(({ id }) => id === productId);
+    cartsDao.deleteOneProduct(cartId, productId);
 
-    if (productIndex === -1) {
-      return response.status(200).json({
-        message: `El producto: ${id_prod} no existe en el carrito: ${id_cart}`,
-      });
-    }
-    cart.products.splice(productIndex, 1);
-
-    writeFile(carts);
     response.status(200).json({
       message: `Producto: ${id_prod} borrado del carrito: ${id_cart} con éxito`,
     });
   } catch (error) {
+    logger.log(
+      "error",
+      `Hubo un error al borrar un producto del carrito ${error}`
+    );
     response.status(404).json({
       message: "Hubo un error al borrar un producto del carrito",
+    });
+  }
+}
+
+async function checkout(request, response) {
+  try {
+    const id = request.params.id_cart;
+    const cart = await cartsDao.getOne(id);
+    const user = await usersDao.findByEmail(cart.user);
+    if (!cart) {
+      return response.status(404).json({
+        message: "Carrito no encontrado",
+      });
+    }
+    if (!user) {
+      return response.status(404).json({
+        message: "Usuario del carrito no encontrado",
+      });
+    }
+    const { products } = cart;
+    await messageHelper.sendEmail(
+      `Nuevo pedido de: ${user.name}. Tel: ${user.phone}`,
+      "Nueva compra",
+      `<div>
+    <h1>Nuevo pedido de: ${user.name}. Tel: ${user.phone}</h1>
+    <h2>Productos del carrito:</h2>
+      <ul>
+          ${products.map((product) => {
+            return `<li>Product: ${product.id}</li>`;
+          })}
+      </ul>
+    </div>`
+    );
+    await messageHelper.sendSMS(
+      `¡Gracias por comprar con nosotros, ${user.name}! Su pedido está siendo procesado`,
+      user.phone
+    );
+    response.status(200).json({
+      message: `Checkout realizado con éxito`,
+      receipt: {
+        user: user.email,
+        products,
+      },
+    });
+  } catch (error) {
+    logger.log(
+      "error",
+      `Hubo un error al realizar el checkout del carrito ${error}`
+    );
+    response.status(404).json({
+      message: "Hubo un error al realizar el checkout del carrito",
     });
   }
 }
@@ -159,7 +181,7 @@ module.exports = {
   add,
   deleteOne,
   getAllProducts,
-  addOneProduct,
   addManyProducts,
   deleteOneProduct,
+  checkout,
 };
