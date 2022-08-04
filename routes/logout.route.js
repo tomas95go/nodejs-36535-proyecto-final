@@ -7,6 +7,6 @@ const userController = require(path.join(
 ));
 const logoutRouter = express.Router();
 
-logoutRouter.get("/", userController.logout);
+logoutRouter.post("/", userController.logout);
 
 module.exports = logoutRouter;
