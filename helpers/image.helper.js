@@ -1,16 +1,32 @@
 const path = require("path");
-const directoryHelper = require(path.join(__dirname, "directory.helper"));
+const fileHelper = require(path.join(__dirname, "file.helper"));
 
 async function store(img, user) {
   try {
-    const directoryExists = await directoryHelper.createDirectory(user);
-    if (directoryExists) {
+    const directoryExists = await fileHelper.createDirectory(user);
+    if (!directoryExists) {
+      return false;
     }
+    const avatarDirectoryExists = await fileHelper.save(user, img);
+    if (!avatarDirectoryExists) {
+      return false;
+    }
+    return true;
   } catch (error) {
     throw `Hubo un error al guarda el avatar del usuario`;
   }
 }
 
+async function getUserAvatarURL(user) {
+  try {
+    const userDirectory = await fileHelper.getUserDirectory(user);
+    return userDirectory;
+  } catch (error) {
+    throw `Hubo un error al obtener la carpeta del usuario`;
+  }
+}
+
 module.exports = {
   store,
+  getUserAvatarURL,
 };
