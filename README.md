@@ -32,10 +32,3 @@ Por favor, leer antes de ejecutar.
 
 - Para probar los accesos de ADMIN cambiar la variable isAdmin en helpers/admin.helper.js de TRUE a FALSE o viceversa.
 - Para probar que método/ruta no fue implementado, escribir: http://localhost:8080/api/product o similar, una ruta que no exista.
-
-## Ejemplo de .env para config.
-
-MONGO_CONNECTION_STRING="my_connection_string"
-MONGO_DATABASE="my_database_name"
-DB_ENGINE=my_db_engine (puede ser "mongo" o "firebase")
-FIREBASE_KEY="my_firebase_credentials_json"
