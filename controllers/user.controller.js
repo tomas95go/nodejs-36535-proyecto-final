@@ -46,7 +46,7 @@ async function register(request, response) {
         });
       }
     } else {
-      const registeredUser = await usersDao.register(newUser, userAvatarURL);
+      const registeredUser = await usersDao.register(newUser, "my_avatar_url");
       const { email, avatar, name, age, address, phone } = registeredUser;
       await messageHelper.sendEmail(
         "Nuevo registro",
