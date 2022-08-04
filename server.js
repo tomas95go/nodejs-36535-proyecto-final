@@ -16,6 +16,7 @@ const loginRouter = require(`${__dirname}/routes/login.route`);
 const logoutRouter = require(`${__dirname}/routes/logout.route`);
 const routeHelper = require(`${__dirname}/helpers/route.helper`);
 const checkoutRouter = require(`${__dirname}/routes/checkout.route`);
+const profileRouter = require(`${__dirname}/routes/profile.route`);
 const database = require(path.join(__dirname, "/config"));
 
 const app = express();
@@ -43,6 +44,7 @@ app.use("/api/logout", logoutRouter);
 app.use("/api/productos", productsRouter);
 app.use("/api/carrito", cartsRouter);
 app.use("/api/checkout", checkoutRouter);
+app.use("/api/profile", profileRouter);
 app.use(routeHelper.checkRoute);
 
 database.connect();
