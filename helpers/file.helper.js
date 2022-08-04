@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const logger = require(`${__dirname}/winston.helper`);
 
 async function createDirectory(user) {
   try {
@@ -12,6 +13,7 @@ async function createDirectory(user) {
     const directoryExists = fs.existsSync(`${userDirectory}`);
     return directoryExists;
   } catch (error) {
+    logger.log("error", `Hubo un error al crear la carpeta del usuario`);
     throw `Hubo un error al crear la carpeta del usuario`;
   }
 }
@@ -25,6 +27,7 @@ async function getUserDirectory(user) {
     );
     return userDirectory;
   } catch (error) {
+    logger.log("error", `Hubo un error al obtener la carpeta del usuario`);
     throw `Hubo un error al obtener la carpeta del usuario`;
   }
 }
@@ -36,6 +39,7 @@ async function getUserRelativeDirectory(user) {
     const userRelativeDirectory = `${process.env.LOCAL_BASE_URL}/storage/users/${user}/${userDirectoryContent[0]}`;
     return userRelativeDirectory;
   } catch (error) {
+    logger.log("error", `Hubo un error al obtener la carpeta del usuario`);
     throw `Hubo un error al obtener la carpeta del usuario`;
   }
 }
@@ -48,6 +52,7 @@ async function save(user, img) {
     const avatarDirectoryExists = fs.existsSync(`${userAvatarDirectory}`);
     return avatarDirectoryExists;
   } catch (error) {
+    logger.log("error", `Hubo un error al crear un archivo`);
     throw `Hubo un error al crear un archivo`;
   }
 }

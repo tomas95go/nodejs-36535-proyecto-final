@@ -2,6 +2,7 @@ const path = require("path");
 const LocalStrategy = require("passport-local").Strategy;
 const usersDao = require(path.join(__dirname, "..", "daos/users.dao"));
 const bcrypt = require("bcrypt");
+const logger = require(`${__dirname}/winston.helper`);
 function initialize(passport) {
   const authenticateUser = async (email, password, done) => {
     try {
@@ -16,6 +17,7 @@ function initialize(passport) {
         return done(null, false);
       }
     } catch (error) {
+      logger.log("error", `Hubo un error en passport ${error}`);
       return done(error);
     }
   };

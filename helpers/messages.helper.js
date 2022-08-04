@@ -2,6 +2,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const sgMail = require("@sendgrid/mail");
 const twilio = require("twilio")(accountSid, authToken);
+const logger = require(`${__dirname}/winston.helper`);
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function sendEmail(subject, message, html) {
@@ -16,6 +17,7 @@ async function sendEmail(subject, message, html) {
     const sentEmail = await sgMail.send(msg);
     return sentEmail;
   } catch (error) {
+    logger.log("error", "Hubo un error al enviar el email");
     throw "Hubo un error al enviar el email";
   }
 }
@@ -28,6 +30,7 @@ async function sendSMS(message, number) {
     });
     return newMessage;
   } catch (error) {
+    logger.log("error", "Hubo un error al enviar el mensaje");
     throw "Hubo un error al enviar el mensaje";
   }
 }
