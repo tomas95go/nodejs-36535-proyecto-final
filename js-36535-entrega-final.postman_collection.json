@@ -1,0 +1,189 @@
+{
+  "info": {
+    "_postman_id": "bf62249a-8973-4d69-90e3-812302a785fb",
+    "name": "js-36535-entrega-final",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "17526370"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\t\"email\": \"email\",\r\n\t\"password\": \"mipassword\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/login",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "email",
+                  "value": "{{EMAIL}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "mipassword",
+                  "type": "text"
+                },
+                {
+                  "key": "avatar",
+                  "type": "file",
+                  "src": "HGsJ90367/avatar.png"
+                },
+                {
+                  "key": "name",
+                  "value": "Tommy",
+                  "type": "text"
+                },
+                {
+                  "key": "age",
+                  "value": "27",
+                  "type": "text"
+                },
+                {
+                  "key": "address",
+                  "value": "calle",
+                  "type": "text"
+                },
+                {
+                  "key": "phone",
+                  "value": "{{PHONE}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/register",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/logout",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "logout"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/profile/{{EMAIL}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "profile", "{{EMAIL}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Checkout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/checkout/62eadfdb6ff0984ca78b4bf2",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "checkout", "62eadfdb6ff0984ca78b4bf2"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "New Cart",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\t\"user\": \"mail\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/carrito",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "carrito"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "https://nodejs-36535-tercera-entrega.herokuapp.com",
+      "type": "string"
+    },
+    {
+      "key": "EMAIL",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "PHONE",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

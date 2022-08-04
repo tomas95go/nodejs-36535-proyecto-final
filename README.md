@@ -8,28 +8,6 @@ Por favor, leer antes de ejecutar.
 2. Ejecutar "npm install" para instalar las dependecias.
 3. Ejecutar "npm start" o "npm run dev".
 
-## Listado de los diferentes endpoints
-
-- Carritos/REST:
-
-| HTTP   | ENDPOINT                                                             | RESULTADO                       |
-| ------ | -------------------------------------------------------------------- | ------------------------------- |
-| POST   | http://localhost:8080/api/carrito                                    | Agrega carrito                  |
-| DELETE | http://localhost:8080/api/carrito/:id_carrito                        | Borrado (lógico) carrito        |
-| GET    | http://localhost:8080/api/carrito/:id_carrito/productos              | Listado de productos en carrito |
-| POST   | http://localhost:8080/api/carrito/:id_carrito/productos              | Agrega productos al carrito     |
-| DELETE | http://localhost:8080/api/carrito/:id_carrito/productos/:id_producto | Borra un producto de un carrito |
-
-- Productos/REST:
-
-| HTTP   | ENDPOINT                                | RESULTADO              |
-| ------ | --------------------------------------- | ---------------------- |
-| GET    | http://localhost:8080/api/productos     | Listado de álbumes     |
-| GET    | http://localhost:8080/api/productos/:id | Álbum individual       |
-| POST   | http://localhost:8080/api/productos/    | Agrega álbumes         |
-| PUT    | http://localhost:8080/api/productos/:id | Actualiza álbum        |
-| DELETE | http://localhost:8080/api/productos/:id | Borrado (lógico) álbum |
-
 ## Ejemplo para el .env (En caso de instalar localmente)
 
 PRODUCTION=false
@@ -47,3 +25,20 @@ SENDGRID_API_KEY="my_api_key"
 
 NOTA: El WORK_EMAIL debe ser diferente al PERSONAL_EMAIL. El PERSONAL_EMAIL es el mail DESTINO, el WORK_EMAIL es el mes que envia el correo. El WORK_EMAIL debe ser un mail
 registrado en SendGrid para que funcione.
+
+## Probar el programa en Heroku
+
+1. Tener el programa POSTMAN instalado.
+2. Importar la colleción "js-36535-entrega-final.postman_collection.json".
+3. En la sección "variable" de la colleción ingresar un value en EMAIL y un value en PHONE (formato: +54.... u otro prefijo) para probar los end points.
+4. Una vez importada la colleción en la request de LOGIN, NEW CART colocar email en el JSON.
+5. Al haber finalizado con esta configuración, seguir los siguientes pasos:
+   5.1. Realizar el registro de un nuevo usuario con sus respectivos datos.
+   5.2. Realizar el login con las credeciales correspondientes.
+   5.3. Crear un nuevo carrito con el email correspondiente.
+   5.4. Realizar el checkout con el ID del carrito obtenido en el paso 5.3.
+   5.5. Realizar una consulta al perfil para obtener los datos del usuario.
+
+Notas:
+-Algunos endpoints deberían fallar si el usuario no está logueado, por ejemplo: /api/profile.
+-Por el momento no se guarda la imagen en Heroku, si en la instalación local con el debido .env (PRODUCTION en FALSE).
