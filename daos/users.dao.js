@@ -20,16 +20,16 @@ const usersSchema = new mongoose.Schema(
 
 const User = mongoose.model("User", usersSchema);
 
-async function register(newUser) {
+async function register(newUser, userAvatarURL) {
   try {
-    const { email, password, avatar, name, age, address, phone } = newUser;
+    const { email, password, name, age, address, phone } = newUser;
 
     const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
     const user = new User({
       email,
       password: encryptedPassword,
-      avatar,
+      avatar: userAvatarURL,
       name,
       age,
       address,
