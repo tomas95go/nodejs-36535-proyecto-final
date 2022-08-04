@@ -1,5 +1,6 @@
 const path = require("path");
 const usersDao = require(path.join(__dirname, "..", "daos/users.dao"));
+const imageHelper = require(path.join(__dirname, "..", "helpers/image.helper"));
 const messageHelper = require(path.join(
   __dirname,
   "..",
@@ -9,32 +10,42 @@ const messageHelper = require(path.join(
 async function register(request, response) {
   try {
     const newUser = request.body;
-    const registeredUser = await usersDao.register(newUser);
-    const { email, avatar, name, age, address, phone } = registeredUser;
-    await messageHelper.sendEmail(
-      newUser,
-      "Nuevo registro",
-      "Gracias por registrarte",
-      `<div>
-      <h1>Alerta</h1>
-      <h2>Un usuario se ha registrado con los siguientes datos:</h2>
-        <ul>
-            <li>Email: ${email}</li>
-            <li>Avatar: <img src="${avatar}" alt="avatar" /></li>
-            <li>Nombre: ${name}</li>
-            <li>Edad: ${age}</li>
-            <li>Dirección: ${address}</li>
-            <li>Número de teléfono: ${phone}</li>
-        </ul>
-      </div>`
-    );
-    response.status(200).json({
-      message: "Nuevo usuario registrado con éxito",
-      registeredUser,
-    });
+    const newUserAvatar = request.file;
+    const isAlreadyRegistered = await usersDao.findByEmail(newUser.email);
+    if (isAlreadyRegistered) {
+      return response.status(404).json({
+        message: `El mail: ${newUser.email} ya está en uso`,
+      });
+    }
+    const imageExists = await imageHelper.store(newUserAvatar, newUser.email);
+    if (imageExists) {
+      const userAvatarURL = await imageHelper.getUserAvatarURL(newUser.email);
+      const registeredUser = await usersDao.register(newUser, userAvatarURL);
+      const { email, avatar, name, age, address, phone } = registeredUser;
+      await messageHelper.sendEmail(
+        "Nuevo registro",
+        "Gracias por registrarte",
+        `<div>
+        <h1>Alerta</h1>
+        <h2>Un usuario se ha registrado con los siguientes datos:</h2>
+          <ul>
+              <li>Email: ${email}</li>
+              <li>Avatar: <img src="${avatar}" alt="avatar" /></li>
+              <li>Nombre: ${name}</li>
+              <li>Edad: ${age}</li>
+              <li>Dirección: ${address}</li>
+              <li>Número de teléfono: ${phone}</li>
+          </ul>
+        </div>`
+      );
+      response.status(200).json({
+        message: "Nuevo usuario registrado con éxito",
+        registeredUser,
+      });
+    }
   } catch (error) {
     response.status(404).json({
-      message: "Ocurrió un error al registrar el nuevo usuario",
+      message: `Ocurrió un error al registrar el nuevo usuario ${error}`,
     });
   }
 }
