@@ -8,6 +8,7 @@ const cpuQuantity = require("os").cpus().length;
 require("dotenv").config();
 
 const passportHelper = require(`${__dirname}/helpers/passport.helper`);
+const logger = require(`${__dirname}/helpers/winston.helper`);
 const productsRouter = require(`${__dirname}/routes/products.route`);
 const cartsRouter = require(`${__dirname}/routes/carts.route`);
 const registerRouter = require(`${__dirname}/routes/register.route`);
@@ -30,6 +31,10 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.use((request, response, next) => {
+  logger.log("info", `Petición recibida: ${request.method} - ${request.path}`);
+  next();
+});
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/api/register", registerRouter);
@@ -42,7 +47,7 @@ app.use(routeHelper.checkRoute);
 
 database.connect();
 
-if (cluster.isPrimary && process.env.CLUSTER_MODE) {
+if (cluster.isPrimary && process.env.CLUSTER_MODE === true) {
   console.log("Inicializando en modo cluster");
   for (let i = 0; i < cpuQuantity; i++) {
     cluster.fork();
