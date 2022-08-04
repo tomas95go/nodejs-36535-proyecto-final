@@ -6,24 +6,15 @@ const isLoggedIn = require(path.join(__dirname, "..", "helpers/auth.helper"));
 
 const productsRouter = express.Router();
 
+productsRouter.use(isLoggedIn);
 //get all - admin/user
 productsRouter.get("/", productsController.getAll);
 //get one - admin/user
 productsRouter.get("/:id", productsController.getOne);
 //post - admin
-productsRouter.post(
-  "/",
-  isLoggedIn,
-  adminHelper.checkRole,
-  productsController.addMany
-);
+productsRouter.post("/", adminHelper.checkRole, productsController.addMany);
 //put - admin
-productsRouter.put(
-  "/:id",
-  isLoggedIn,
-  adminHelper.checkRole,
-  productsController.updateOne
-);
+productsRouter.put("/:id", adminHelper.checkRole, productsController.updateOne);
 //delete - admin
 productsRouter.delete(
   "/:id",

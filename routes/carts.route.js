@@ -5,6 +5,8 @@ const isLoggedIn = require(path.join(__dirname, "..", "helpers/auth.helper"));
 
 const cartRouter = express.Router();
 
+cartRouter.use(isLoggedIn);
+
 //post - admin/user - new cart
 cartRouter.post("/", cartController.add);
 //delete - admin/user - delete cart
