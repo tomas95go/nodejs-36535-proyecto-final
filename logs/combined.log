@@ -23,3 +23,23 @@
   message: 'Operación: GET en ruta /api/checkout/62eadfdb6ff0984ca78b4bf2 no implementada',
   timestamp: '2022-08-04 17:17:47'
 }
+{
+  level: 'warn',
+  message: 'Operación: POST en ruta /api/productos/ no autorizada por falta de credenciales',
+  timestamp: '2022-08-04 18:00:52'
+}
+{
+  level: 'warn',
+  message: 'Operación: GET en ruta /api/productos/62e98a83e8393bc4a03f2c1e no autorizada por falta de credenciales',
+  timestamp: '2022-08-04 18:15:00'
+}
+{
+  level: 'warn',
+  message: 'Operación: GET en ruta /api/carrito/62cc23720ba003f48243bd76/productos no autorizada por falta de credenciales',
+  timestamp: '2022-08-04 18:15:43'
+}
+{
+  level: 'warn',
+  message: 'Operación: POST en ruta /api/checkout/62eadfdb6ff0984ca78b4bf2 no autorizada por falta de credenciales',
+  timestamp: '2022-08-04 18:16:23'
+}
