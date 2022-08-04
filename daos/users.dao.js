@@ -28,16 +28,29 @@ async function register(newUser, userAvatarURL) {
 
     const encryptedPassword = await bcrypt.hash(password, saltRounds);
 
-    const user = new User({
-      email,
-      password: encryptedPassword,
-      avatar: userAvatarURL,
-      name,
-      age,
-      address,
-      phone,
-      active: true,
-    });
+    if (!process.env.PRODUCTION) {
+      const user = new User({
+        email,
+        password: encryptedPassword,
+        avatar: userAvatarURL,
+        name,
+        age,
+        address,
+        phone,
+        active: true,
+      });
+    } else {
+      const user = new User({
+        email,
+        password: encryptedPassword,
+        avatar: "avatar",
+        name,
+        age,
+        address,
+        phone,
+        active: true,
+      });
+    }
 
     const registeredUser = await user.save();
 
