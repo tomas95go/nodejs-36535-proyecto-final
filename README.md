@@ -30,5 +30,20 @@ Por favor, leer antes de ejecutar.
 | PUT    | http://localhost:8080/api/productos/:id | Actualiza álbum        |
 | DELETE | http://localhost:8080/api/productos/:id | Borrado (lógico) álbum |
 
-- Para probar los accesos de ADMIN cambiar la variable isAdmin en helpers/admin.helper.js de TRUE a FALSE o viceversa.
-- Para probar que método/ruta no fue implementado, escribir: http://localhost:8080/api/product o similar, una ruta que no exista.
+## Ejemplo para el .env (En caso de instalar localmente)
+
+PRODUCTION=false
+LOCAL_BASE_URL="http://localhost:8080"
+CLUSTER_MODE=false
+SECRET_SESSION="my_secret_session"
+MONGO_CONNECTION_STRING="my_mongo_atlas_connection_string"
+MONGO_DATABASE="my_database"
+TWILIO_ACCOUNT_SID="my_twilio_account_sid"
+TWILIO_AUTH_TOKEN="my_twilio_auth_token"
+PHONE_SID="my_twilio_phone_sid"
+WORK_EMAIL="my_other_email"
+PERSONAL_EMAIL="my_email"
+SENDGRID_API_KEY="my_api_key"
+
+NOTA: El WORK_EMAIL debe ser diferente al PERSONAL_EMAIL. El PERSONAL_EMAIL es el mail DESTINO, el WORK_EMAIL es el mes que envia el correo. El WORK_EMAIL debe ser un mail
+registrado en SendGrid para que funcione.
