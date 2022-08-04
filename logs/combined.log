@@ -1,0 +1,25 @@
+{
+  level: 'error',
+  message: 'Hubo un error al encontrar el carrito CastError: Cast to ObjectId failed for value "xd" (type string) at path "_id" for model "Cart"',
+  timestamp: '2022-08-04 17:17:32'
+}
+{
+  level: 'error',
+  message: 'Hubo un error al encontrar el carrito CastError: Cast to ObjectId failed for value "xd" (type string) at path "_id" for model "Cart"',
+  timestamp: '2022-08-04 17:17:32'
+}
+{
+  level: 'error',
+  message: 'Hubo un error al realizar el checkout del carrito Hubo un error al encontrar el carrito',
+  timestamp: '2022-08-04 17:17:32'
+}
+{
+  level: 'error',
+  message: 'Hubo un error al realizar el checkout del carrito Hubo un error al encontrar el carrito',
+  timestamp: '2022-08-04 17:17:32'
+}
+{
+  level: 'warn',
+  message: 'Operación: GET en ruta /api/checkout/62eadfdb6ff0984ca78b4bf2 no implementada',
+  timestamp: '2022-08-04 17:17:47'
+}
