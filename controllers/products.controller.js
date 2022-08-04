@@ -1,5 +1,6 @@
 const path = require("path");
 const productsDao = require(path.join(__dirname, "..", `daos/products.dao`));
+const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
 
 async function getAll(request, response) {
   try {
@@ -9,6 +10,10 @@ async function getAll(request, response) {
       products,
     });
   } catch (error) {
+    logger.log(
+      "error",
+      `Hubo un error al recuperar la lista de álbumes ${error}`
+    );
     response.status(404).json({
       message: "Hubo un error al recuperar la lista de álbumes",
     });
@@ -29,6 +34,7 @@ async function getOne(request, response) {
       product,
     });
   } catch (error) {
+    logger.log("error", `Hubo un error al buscar el álbum ${error}`);
     response.status(404).json({
       message: "Hubo un error al buscar el álbum",
     });
@@ -46,6 +52,7 @@ async function addOne(request, response) {
       addedProduct,
     });
   } catch (error) {
+    logger.log("error", `Hubo un error al crear el álbum ${error}`);
     response.status(404).json({
       message: "Hubo un error al crear el álbum",
     });
@@ -82,6 +89,7 @@ async function addMany(request, response) {
       });
     });
   } catch (error) {
+    logger.log("error", `Hubo un error al crear muchos álbumes ${error}`);
     response.status(404).json({
       message: "Hubo un error al crear muchos álbumes",
     });
@@ -103,6 +111,7 @@ async function updateOne(request, response) {
       updatedProduct,
     });
   } catch (error) {
+    logger.log("error", `Hubo un error al actualizar el álbum ${error}`);
     response.status(404).json({
       message: "Hubo un error al actualizar el álbum",
     });
@@ -123,6 +132,7 @@ async function deleteOne(request, response) {
       softDeletedProduct,
     });
   } catch (error) {
+    logger.log("error", `Hubo un error al borrar el álbum ${error}`);
     response.status(404).json({
       message: "Hubo un error al borrar el álbum",
     });

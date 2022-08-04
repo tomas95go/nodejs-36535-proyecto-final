@@ -6,6 +6,7 @@ const messageHelper = require(path.join(
   "..",
   "helpers/messages.helper"
 ));
+const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
 
 async function register(request, response) {
   try {
@@ -44,6 +45,10 @@ async function register(request, response) {
       });
     }
   } catch (error) {
+    logger.log(
+      "error",
+      `Ocurrió un error al registrar el nuevo usuario ${error}`
+    );
     response.status(404).json({
       message: `Ocurrió un error al registrar el nuevo usuario ${error}`,
     });
@@ -56,6 +61,7 @@ function login(request, response) {
       message: "Usuario autenticado con éxito",
     });
   } catch (error) {
+    logger.log("error", `Usuario o contraseña no válida ${error}`);
     response.status(401).json({
       message: "Usuario o contraseña no válida",
     });

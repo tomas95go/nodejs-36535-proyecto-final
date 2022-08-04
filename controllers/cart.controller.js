@@ -6,6 +6,7 @@ const messageHelper = require(path.join(
   "..",
   "helpers/messages.helper"
 ));
+const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
 
 function add(request, response) {
   try {
@@ -16,6 +17,7 @@ function add(request, response) {
       newCart,
     });
   } catch (error) {
+    logger.log("error", `Hubo un error al crear el carrito ${error}`);
     response.status(404).json({
       message: "Hubo un error al crear el carrito",
     });
@@ -36,6 +38,7 @@ async function deleteOne(request, response) {
       cart,
     });
   } catch (error) {
+    logger.log("error", `Hubo un error al borrar el carrito ${error}`);
     response.status(404).json({
       message: "Hubo un error al borrar el carrito",
     });
@@ -58,6 +61,10 @@ async function getAllProducts(request, response) {
       products,
     });
   } catch (error) {
+    logger.log(
+      "error",
+      `Hubo un error al recuperar los productos del carrito ${error}`
+    );
     response.status(404).json({
       message: "Hubo un error al recuperar los productos del carrito",
     });
@@ -88,6 +95,10 @@ async function addManyProducts(request, response) {
       cart,
     });
   } catch (error) {
+    logger.log(
+      "error",
+      `Hubo un error al agregar productos al carrito ${error}`
+    );
     response.status(404).json({
       message: "Hubo un error al agregar productos al carrito",
     });
@@ -105,6 +116,10 @@ function deleteOneProduct(request, response) {
       message: `Producto: ${id_prod} borrado del carrito: ${id_cart} con éxito`,
     });
   } catch (error) {
+    logger.log(
+      "error",
+      `Hubo un error al borrar un producto del carrito ${error}`
+    );
     response.status(404).json({
       message: "Hubo un error al borrar un producto del carrito",
     });
@@ -152,6 +167,10 @@ async function checkout(request, response) {
       },
     });
   } catch (error) {
+    logger.log(
+      "error",
+      `Hubo un error al realizar el checkout del carrito ${error}`
+    );
     response.status(404).json({
       message: "Hubo un error al realizar el checkout del carrito",
     });
