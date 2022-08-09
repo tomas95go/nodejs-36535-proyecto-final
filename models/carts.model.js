@@ -1,6 +1,5 @@
 const path = require("path");
 const mongoose = require("mongoose");
-const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
 
 const cartSchema = new mongoose.Schema(
   {
@@ -25,7 +24,6 @@ function addOne(user) {
 
     return cart;
   } catch (error) {
-    logger.log("error", `Hubo un error al crear el carrito ${error}`);
     throw "Hubo un error al crear el carrito";
   }
 }
@@ -35,7 +33,6 @@ async function getOne(id) {
     const cart = await Cart.findById(id);
     return cart;
   } catch (error) {
-    logger.log("error", `Hubo un error al encontrar el carrito ${error}`);
     throw "Hubo un error al encontrar el carrito";
   }
 }
@@ -53,7 +50,6 @@ async function deleteOne(id) {
     );
     return softDeletedCart;
   } catch (error) {
-    logger.log("error", `Hubo un error al borrar el carrito ${error}`);
     throw "Hubo un error al borrar el carrito";
   }
 }
@@ -69,10 +65,6 @@ async function addManyProducts(id, products) {
     );
     return updatedCart;
   } catch (error) {
-    logger.log(
-      "error",
-      `Hubo un error al agregar productos al carrito ${error}`
-    );
     throw "Hubo un error al agregar porductos al carrito";
   }
 }
@@ -88,10 +80,6 @@ async function deleteOneProduct(cart_id, product_id) {
     );
     return updatedCart;
   } catch (error) {
-    logger.log(
-      "error",
-      `Hubo un error al eliminar porductos del carrito ${error}`
-    );
     throw "Hubo un error al eliminar porductos del carrito";
   }
 }

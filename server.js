@@ -6,7 +6,6 @@ const cluster = require("cluster");
 const cpuQuantity = require("os").cpus().length;
 require("dotenv").config();
 
-const logger = require(`${__dirname}/helpers/winston.helper`);
 const productsRouter = require(`${__dirname}/routes/products.route`);
 const cartsRouter = require(`${__dirname}/routes/carts.route`);
 const registerRouter = require(`${__dirname}/routes/register.route`);
@@ -30,10 +29,6 @@ app.use(
     saveUninitialized: false,
   })
 );
-app.use((request, response, next) => {
-  logger.log("info", `Petición recibida: ${request.method} - ${request.path}`);
-  next();
-});
 
 app.use("/api/register", registerRouter);
 app.use("/api/login", loginRouter);

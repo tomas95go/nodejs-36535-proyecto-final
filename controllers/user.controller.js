@@ -5,7 +5,6 @@ const messageHelper = require(path.join(
   "..",
   "helpers/messages.helper"
 ));
-const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
 
 async function register(request, response) {
   try {
@@ -42,10 +41,6 @@ async function register(request, response) {
       registeredUser,
     });
   } catch (error) {
-    logger.log(
-      "error",
-      `Ocurrió un error al registrar el nuevo usuario ${error}`
-    );
     response.status(404).json({
       message: `Ocurrió un error al registrar el nuevo usuario ${error}`,
     });
@@ -56,7 +51,6 @@ function login(request, response) {
   try {
     request.session.save((err) => {
       if (err) {
-        logger.log("error", `Hubo un error al guardar la sessio ${err}`);
         return response.status(404).json({
           message: "Hubo un error al guardar la session",
         });
@@ -67,7 +61,6 @@ function login(request, response) {
       });
     });
   } catch (error) {
-    logger.log("error", `Usuario o contraseña no válida ${error}`);
     response.status(401).json({
       message: "Usuario o contraseña no válida",
     });
@@ -78,10 +71,6 @@ function logout(request, response) {
   try {
     request.session.destroy(function (err) {
       if (err) {
-        logger.log(
-          "error",
-          `Error al realizar al destruir la session ${error}`
-        );
         return response.status(404).json({
           message: "Error al realizar al destruir la session",
         });
@@ -92,7 +81,6 @@ function logout(request, response) {
       });
     });
   } catch (error) {
-    logger.log("error", `Error al realizar el logout ${error}`);
     response.status(401).json({
       message: "Error al realizar el logout",
     });
@@ -116,10 +104,6 @@ async function getProfile(request, response) {
       },
     });
   } catch (error) {
-    logger.log(
-      "error",
-      `Ocurrió un error al obtener el perfil del usuario ${error}`
-    );
     response.status(404).json({
       message: `Ocurrió un error al obtener el perfil del usuario ${error}`,
     });
