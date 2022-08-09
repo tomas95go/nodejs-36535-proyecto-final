@@ -1,7 +1,5 @@
 const express = require("express");
 const path = require("path");
-const multer = require("multer");
-const upload = multer();
 const userController = require(path.join(
   __dirname,
   "..",
@@ -9,6 +7,6 @@ const userController = require(path.join(
 ));
 const registerRouter = express.Router();
 
-registerRouter.post("/", upload.single("avatar"), userController.register);
+registerRouter.post("/", userController.register);
 
 module.exports = registerRouter;

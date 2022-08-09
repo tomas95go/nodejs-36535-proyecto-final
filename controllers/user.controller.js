@@ -1,6 +1,5 @@
 const path = require("path");
 const productsModel = require(path.join(__dirname, "..", "models/users.model"));
-const imageHelper = require(path.join(__dirname, "..", "helpers/image.helper"));
 const messageHelper = require(path.join(
   __dirname,
   "..",
@@ -11,26 +10,21 @@ const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
 async function register(request, response) {
   try {
     const newUser = request.body;
-    const newUserAvatar = request.file;
     const isAlreadyRegistered = await productsModel.findByEmail(newUser.email);
     if (isAlreadyRegistered) {
       return response.status(404).json({
         message: `El mail: ${newUser.email} ya está en uso`,
       });
     }
-    if (!process.env.PRODUCTION) {
-      const imageExists = await imageHelper.store(newUserAvatar, newUser.email);
-      if (imageExists) {
-        const userAvatarURL = await imageHelper.getUserAvatarURL(newUser.email);
-        const registeredUser = await productsModel.register(
-          newUser,
-          userAvatarURL
-        );
-        const { email, avatar, name, age, address, phone } = registeredUser;
-        await messageHelper.sendEmail(
-          "Nuevo registro",
-          "Gracias por registrarte",
-          `<div>
+    const registeredUser = await productsModel.register(
+      newUser,
+      "my_avatar_url"
+    );
+    const { email, avatar, name, age, address, phone } = registeredUser;
+    await messageHelper.sendEmail(
+      "Nuevo registro",
+      "Gracias por registrarte",
+      `<div>
           <h1>Alerta</h1>
           <h2>Un usuario se ha registrado con los siguientes datos:</h2>
             <ul>
@@ -42,39 +36,11 @@ async function register(request, response) {
                 <li>Número de teléfono: ${phone}</li>
             </ul>
           </div>`
-        );
-        response.status(200).json({
-          message: "Nuevo usuario registrado con éxito",
-          registeredUser,
-        });
-      }
-    } else {
-      const registeredUser = await productsModel.register(
-        newUser,
-        "my_avatar_url"
-      );
-      const { email, avatar, name, age, address, phone } = registeredUser;
-      await messageHelper.sendEmail(
-        "Nuevo registro",
-        "Gracias por registrarte",
-        `<div>
-          <h1>Alerta</h1>
-          <h2>Un usuario se ha registrado con los siguientes datos:</h2>
-            <ul>
-                <li>Email: ${email}</li>
-                <li>Avatar: <img src="${avatar}" alt="avatar" /></li>
-                <li>Nombre: ${name}</li>
-                <li>Edad: ${age}</li>
-                <li>Dirección: ${address}</li>
-                <li>Número de teléfono: ${phone}</li>
-            </ul>
-          </div>`
-      );
-      response.status(200).json({
-        message: "Nuevo usuario registrado con éxito",
-        registeredUser,
-      });
-    }
+    );
+    response.status(200).json({
+      message: "Nuevo usuario registrado con éxito",
+      registeredUser,
+    });
   } catch (error) {
     logger.log(
       "error",
