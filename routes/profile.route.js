@@ -5,11 +5,8 @@ const userController = require(path.join(
   "..",
   "controllers/user.controller"
 ));
-const isLoggedIn = require(path.join(__dirname, "..", "helpers/auth.helper"));
 
 const profileRouter = express.Router();
-
-profileRouter.use(isLoggedIn);
 
 profileRouter.get("/:email", userController.getProfile);
 

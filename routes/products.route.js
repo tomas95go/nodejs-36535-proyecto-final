@@ -2,11 +2,9 @@ const express = require("express");
 const path = require("path");
 const productsController = require("../controllers/products.controller");
 const adminHelper = require("../helpers/admin.helper");
-const isLoggedIn = require(path.join(__dirname, "..", "helpers/auth.helper"));
 
 const productsRouter = express.Router();
 
-productsRouter.use(isLoggedIn);
 //get all - admin/user
 productsRouter.get("/", productsController.getAll);
 //get one - admin/user

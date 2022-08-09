@@ -20,14 +20,6 @@ const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 
-app.use(
-  session({
-    secret: process.env.SECRET_SESSION,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
 app.use("/api/register", registerRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/logout", logoutRouter);

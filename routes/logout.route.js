@@ -5,10 +5,9 @@ const userController = require(path.join(
   "..",
   "controllers/user.controller"
 ));
-const isLoggedIn = require(path.join(__dirname, "..", "helpers/auth.helper"));
+
 const logoutRouter = express.Router();
 
-logoutRouter.use(isLoggedIn);
 logoutRouter.post("/", userController.logout);
 
 module.exports = logoutRouter;
