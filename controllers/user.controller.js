@@ -1,5 +1,5 @@
 const path = require("path");
-const usersDao = require(path.join(__dirname, "..", "daos/users.dao"));
+const productsModel = require(path.join(__dirname, "..", "models/users.model"));
 const imageHelper = require(path.join(__dirname, "..", "helpers/image.helper"));
 const messageHelper = require(path.join(
   __dirname,
@@ -12,7 +12,7 @@ async function register(request, response) {
   try {
     const newUser = request.body;
     const newUserAvatar = request.file;
-    const isAlreadyRegistered = await usersDao.findByEmail(newUser.email);
+    const isAlreadyRegistered = await productsModel.findByEmail(newUser.email);
     if (isAlreadyRegistered) {
       return response.status(404).json({
         message: `El mail: ${newUser.email} ya está en uso`,
@@ -22,7 +22,10 @@ async function register(request, response) {
       const imageExists = await imageHelper.store(newUserAvatar, newUser.email);
       if (imageExists) {
         const userAvatarURL = await imageHelper.getUserAvatarURL(newUser.email);
-        const registeredUser = await usersDao.register(newUser, userAvatarURL);
+        const registeredUser = await productsModel.register(
+          newUser,
+          userAvatarURL
+        );
         const { email, avatar, name, age, address, phone } = registeredUser;
         await messageHelper.sendEmail(
           "Nuevo registro",
@@ -46,7 +49,10 @@ async function register(request, response) {
         });
       }
     } else {
-      const registeredUser = await usersDao.register(newUser, "my_avatar_url");
+      const registeredUser = await productsModel.register(
+        newUser,
+        "my_avatar_url"
+      );
       const { email, avatar, name, age, address, phone } = registeredUser;
       await messageHelper.sendEmail(
         "Nuevo registro",
@@ -130,7 +136,7 @@ function logout(request, response) {
 async function getProfile(request, response) {
   try {
     const user = request.params;
-    const userFound = await usersDao.findByEmail(user.email);
+    const userFound = await productsModel.findByEmail(user.email);
     const { email, avatar, name, age, address, phone } = userFound;
     response.status(200).json({
       message: "Perfil del usuario obtenido con éxito",

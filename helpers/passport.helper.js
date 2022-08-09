@@ -1,12 +1,12 @@
 const path = require("path");
 const LocalStrategy = require("passport-local").Strategy;
-const usersDao = require(path.join(__dirname, "..", "daos/users.dao"));
+const usersModel = require(path.join(__dirname, "..", "models/users.model"));
 const bcrypt = require("bcrypt");
 const logger = require(`${__dirname}/winston.helper`);
 function initialize(passport) {
   const authenticateUser = async (email, password, done) => {
     try {
-      const user = await usersDao.findByEmail(email);
+      const user = await usersModel.findByEmail(email);
       if (!user) {
         return done(null, false);
       }
@@ -32,7 +32,7 @@ function initialize(passport) {
   passport.serializeUser((user, done) => done(null, user._id));
 
   passport.deserializeUser((user, done) => {
-    return done(null, usersDao.findById(user._id));
+    return done(null, usersModel.findById(user._id));
   });
 }
 

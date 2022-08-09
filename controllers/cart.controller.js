@@ -1,6 +1,6 @@
 const path = require("path");
-const cartsDao = require(path.join(__dirname, "..", `daos/carts.dao`));
-const usersDao = require(path.join(__dirname, "..", `daos/users.dao`));
+const cartsModel = require(path.join(__dirname, "..", `models/carts.model`));
+const usersModel = require(path.join(__dirname, "..", `models/users.model`));
 const messageHelper = require(path.join(
   __dirname,
   "..",
@@ -11,7 +11,7 @@ const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
 function add(request, response) {
   try {
     const { user } = request.body;
-    const newCart = cartsDao.addOne(user);
+    const newCart = cartsModel.addOne(user);
     response.status(201).json({
       message: "Nuevo carrito creado con éxito",
       newCart,
@@ -27,7 +27,7 @@ function add(request, response) {
 async function deleteOne(request, response) {
   try {
     const id = request.params.id;
-    const cart = await cartsDao.deleteOne(id);
+    const cart = await cartsModel.deleteOne(id);
     if (!cart) {
       return response.status(404).json({
         message: "Carrito no encontrado",
@@ -48,7 +48,7 @@ async function deleteOne(request, response) {
 async function getAllProducts(request, response) {
   try {
     const id = request.params.id;
-    const cart = await cartsDao.getOne(id);
+    const cart = await cartsModel.getOne(id);
 
     if (!cart) {
       return response.status(404).json({
@@ -74,7 +74,7 @@ async function addManyProducts(request, response) {
   try {
     const id = request.params.id;
     const newAlbums = request.body;
-    const cart = await cartsDao.addManyProducts(id, newAlbums);
+    const cart = await cartsModel.addManyProducts(id, newAlbums);
 
     if (!cart) {
       return response.status(404).json({
@@ -110,7 +110,7 @@ function deleteOneProduct(request, response) {
     const cartId = id_cart;
     const productId = Number(id_prod);
 
-    cartsDao.deleteOneProduct(cartId, productId);
+    cartsModel.deleteOneProduct(cartId, productId);
 
     response.status(200).json({
       message: `Producto: ${id_prod} borrado del carrito: ${id_cart} con éxito`,
@@ -129,8 +129,8 @@ function deleteOneProduct(request, response) {
 async function checkout(request, response) {
   try {
     const id = request.params.id_cart;
-    const cart = await cartsDao.getOne(id);
-    const user = await usersDao.findByEmail(cart.user);
+    const cart = await cartsModel.getOne(id);
+    const user = await usersModel.findByEmail(cart.user);
     if (!cart) {
       return response.status(404).json({
         message: "Carrito no encontrado",

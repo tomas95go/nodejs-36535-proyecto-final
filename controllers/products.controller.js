@@ -1,10 +1,14 @@
 const path = require("path");
-const productsDao = require(path.join(__dirname, "..", `daos/products.dao`));
+const productsModel = require(path.join(
+  __dirname,
+  "..",
+  `models/products.model`
+));
 const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
 
 async function getAll(request, response) {
   try {
-    const products = await productsDao.getAll();
+    const products = await productsModel.getAll();
     response.status(200).json({
       message: "Lista de álbumes recuperada con éxito",
       products,
@@ -23,7 +27,7 @@ async function getAll(request, response) {
 async function getOne(request, response) {
   try {
     const id = request.params.id;
-    const product = await productsDao.getOne(id);
+    const product = await productsModel.getOne(id);
     if (!product) {
       return response.status(404).json({
         message: "Álbum no encontrado",
@@ -46,7 +50,7 @@ async function addOne(request, response) {
     const newProduct = request.body;
     newProduct.active = true;
     newProduct.timestamp = new Date().toLocaleString("es-AR");
-    const addedProduct = await productsDao.addOne(newProduct);
+    const addedProduct = await productsModel.addOne(newProduct);
     response.status(201).json({
       message: "Nuevo álbum creado con éxito",
       addedProduct,
@@ -66,7 +70,7 @@ async function addMany(request, response) {
     const addedProductsPromises = newProducts.map(async (newProduct) => {
       newProduct.active = true;
       newProduct.timestamp = new Date().toLocaleString("es-AR");
-      const addedProduct = await productsDao.addOne(newProduct);
+      const addedProduct = await productsModel.addOne(newProduct);
       return addedProduct;
     });
 
@@ -100,7 +104,7 @@ async function updateOne(request, response) {
   try {
     const id = request.params.id;
     const newProductData = request.body;
-    const updatedProduct = await productsDao.updateOne(id, newProductData);
+    const updatedProduct = await productsModel.updateOne(id, newProductData);
     if (!updatedProduct) {
       return response.status(404).json({
         message: "Álbum no encontrado",
@@ -121,7 +125,7 @@ async function updateOne(request, response) {
 async function deleteOne(request, response) {
   try {
     const id = request.params.id;
-    const softDeletedProduct = await productsDao.deleteOne(id);
+    const softDeletedProduct = await productsModel.deleteOne(id);
     if (!softDeletedProduct) {
       return response.status(404).json({
         message: "Álbum no encontrado",
