@@ -49,16 +49,8 @@ async function register(request, response) {
 
 function login(request, response) {
   try {
-    request.session.save((err) => {
-      if (err) {
-        return response.status(404).json({
-          message: "Hubo un error al guardar la session",
-        });
-      }
-
-      response.status(200).json({
-        message: "Usuario autenticado con éxito",
-      });
+    response.status(200).json({
+      message: "Usuario autenticado con éxito",
     });
   } catch (error) {
     response.status(401).json({
@@ -69,16 +61,8 @@ function login(request, response) {
 
 function logout(request, response) {
   try {
-    request.session.destroy(function (err) {
-      if (err) {
-        return response.status(404).json({
-          message: "Error al realizar al destruir la session",
-        });
-      }
-
-      response.status(200).json({
-        message: "Sesión terminada con éxito",
-      });
+    response.status(200).json({
+      message: "Sesión terminada con éxito",
     });
   } catch (error) {
     response.status(401).json({
