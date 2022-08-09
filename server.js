@@ -2,8 +2,6 @@ const express = require("express");
 const path = require("path");
 const session = require("express-session");
 const http = require("http");
-const cluster = require("cluster");
-const cpuQuantity = require("os").cpus().length;
 require("dotenv").config();
 
 const productsRouter = require(`${__dirname}/routes/products.route`);
@@ -41,16 +39,6 @@ app.use(routeHelper.checkRoute);
 
 database.connect();
 
-if (cluster.isPrimary && process.env.CLUSTER_MODE === true) {
-  console.log("Inicializando en modo cluster");
-  for (let i = 0; i < cpuQuantity; i++) {
-    cluster.fork();
-  }
-  cluster.on("exit", (worker, code, signal) => {
-    console.log(`Worker: ${worker.process.pid} died`);
-  });
-} else {
-  server.listen(PORT, () => {
-    console.log(`App running on port: ${PORT}. URL: http://localhost:${PORT}`);
-  });
-}
+server.listen(PORT, () => {
+  console.log(`App running on port: ${PORT}. URL: http://localhost:${PORT}`);
+});
