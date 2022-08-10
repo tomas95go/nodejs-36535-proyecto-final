@@ -69,8 +69,18 @@ async function findById(id) {
   }
 }
 
+async function authenticate(password, hash) {
+  try {
+    const isMatch = await bcryptHelper.comparePassword(password, hash);
+    return isMatch;
+  } catch (error) {
+    throw "Hubo un error al validar las credenciales del usuario";
+  }
+}
+
 module.exports = {
   register,
   findByEmail,
   findById,
+  authenticate,
 };

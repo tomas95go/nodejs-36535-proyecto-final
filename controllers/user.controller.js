@@ -19,7 +19,7 @@ async function register(request, response) {
     const registeredUser = await usersModel.register(newUser, "my_avatar_url");
     const { email, avatar, name, age, address, phone } = registeredUser;
     await messageHelper.sendNewUserMessage(registeredUser);
-    response.status(200).json({
+    response.status(201).json({
       message: "Nuevo usuario registrado con éxito",
       user: {
         email,
@@ -39,6 +39,19 @@ async function register(request, response) {
 
 function login(request, response) {
   try {
+    const user = request.body;
+    const userExists = await usersModel.findByEmail(user.email);
+    if(!userExists){
+      return response.status(401).json({
+        message: "Usuario o contraseña no válida",
+      });
+    }
+    const credentialsMatch = await usersModel.authenticate(user.password, userExists.password);
+    if (!credentialsMatch) {
+      return response.status(401).json({
+        message: "Usuario o contraseña no válida",
+      });
+    }
     const token = jwtHelper.generateToken(request.body.email);
     response.status(200).json({
       message: "Usuario autenticado con éxito",

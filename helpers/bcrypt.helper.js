@@ -10,4 +10,13 @@ async function encryptPassword(password) {
   }
 }
 
-module.exports = { encryptPassword };
+async function comparePassword(password, hash) {
+  try {
+    const isMatch = await bcrypt.compare(password, hash);
+    return isMatch;
+  } catch (error) {
+    throw "Hubo un error al comparar las contraseñas";
+  }
+}
+
+module.exports = { encryptPassword, comparePassword };
