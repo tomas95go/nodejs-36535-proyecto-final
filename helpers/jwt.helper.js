@@ -16,14 +16,15 @@ function verify(request, response, next) {
     const authorizationHeader = request.headers["authorization"];
     const requestToken =
       authorizationHeader && authorizationHeader.split(" ")[1];
-    const verified = jwt.verify(requestToken, jwtSecretKey);
-    if (verified) {
+    jwt.verify(requestToken, jwtSecretKey, (error, user) => {
+      if (error) {
+        return response.status(401).send({
+          message: "Hubo un error con sus credenciales, inicie sesión",
+        });
+      }
+      request.user = user;
       return next();
-    } else {
-      return response.status(401).send({
-        message: "Hubo un error con sus credenciales, inicie sesión",
-      });
-    }
+    });
   } catch (error) {
     return response.status(401).send({
       message: "Hubo un error con sus credenciales, inicie sesión",
