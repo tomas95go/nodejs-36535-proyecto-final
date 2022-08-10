@@ -5,6 +5,7 @@ const messageHelper = require(path.join(
   "..",
   "helpers/messages.helper"
 ));
+const jwtHelper = require(path.join(__dirname, "..", `helpers/jwt.helper`));
 
 async function register(request, response) {
   try {
@@ -49,8 +50,10 @@ async function register(request, response) {
 
 function login(request, response) {
   try {
+    const token = jwtHelper.generateToken(request.body.email);
     response.status(200).json({
       message: "Usuario autenticado con éxito",
+      token,
     });
   } catch (error) {
     response.status(401).json({
