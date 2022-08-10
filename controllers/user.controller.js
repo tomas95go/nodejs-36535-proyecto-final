@@ -1,5 +1,5 @@
 const path = require("path");
-const productsModel = require(path.join(__dirname, "..", "models/users.model"));
+const usersModel = require(path.join(__dirname, "..", "models/users.model"));
 const messageHelper = require(path.join(
   __dirname,
   "..",
@@ -10,16 +10,13 @@ const jwtHelper = require(path.join(__dirname, "..", `helpers/jwt.helper`));
 async function register(request, response) {
   try {
     const newUser = request.body;
-    const isAlreadyRegistered = await productsModel.findByEmail(newUser.email);
+    const isAlreadyRegistered = await usersModel.findByEmail(newUser.email);
     if (isAlreadyRegistered) {
       return response.status(404).json({
         message: `El mail: ${newUser.email} ya está en uso`,
       });
     }
-    const registeredUser = await productsModel.register(
-      newUser,
-      "my_avatar_url"
-    );
+    const registeredUser = await usersModel.register(newUser, "my_avatar_url");
     const { email, avatar, name, age, address, phone } = registeredUser;
     await messageHelper.sendEmail(
       "Nuevo registro",
@@ -77,7 +74,7 @@ function logout(request, response) {
 async function getProfile(request, response) {
   try {
     const user = request.params;
-    const userFound = await productsModel.findByEmail(user.email);
+    const userFound = await usersModel.findByEmail(user.email);
     const { email, avatar, name, age, address, phone } = userFound;
     response.status(200).json({
       message: "Perfil del usuario obtenido con éxito",
