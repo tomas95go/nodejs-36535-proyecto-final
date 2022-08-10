@@ -77,7 +77,7 @@ async function sendNewUserMessage(user) {
     throw "Hubo un error al enviar el email de nuevo usuario";
   }
 }
-async function sendSMS(user) {
+async function sendNewOrderSMS(user) {
   try {
     const { name, phone } = user;
     const message = generateOrderInProcessMessage(name);
@@ -95,5 +95,5 @@ async function sendSMS(user) {
 module.exports = {
   sendNewOrderEmail,
   sendNewUserMessage,
-  sendSMS,
+  sendNewOrderSMS,
 };

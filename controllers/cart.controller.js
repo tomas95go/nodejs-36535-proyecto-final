@@ -128,7 +128,7 @@ async function checkout(request, response) {
     }
     const { products } = cart;
     await messageHelper.sendNewOrderEmail(user);
-    await messageHelper.sendSMS(user);
+    await messageHelper.sendNewOrderSMS(user);
     response.status(200).json({
       message: `Checkout realizado con éxito`,
       receipt: {
