@@ -37,16 +37,19 @@ async function register(request, response) {
   }
 }
 
-function login(request, response) {
+async function login(request, response) {
   try {
     const user = request.body;
     const userExists = await usersModel.findByEmail(user.email);
-    if(!userExists){
+    if (!userExists) {
       return response.status(401).json({
         message: "Usuario o contraseña no válida",
       });
     }
-    const credentialsMatch = await usersModel.authenticate(user.password, userExists.password);
+    const credentialsMatch = await usersModel.authenticate(
+      user.password,
+      userExists.password
+    );
     if (!credentialsMatch) {
       return response.status(401).json({
         message: "Usuario o contraseña no válida",
