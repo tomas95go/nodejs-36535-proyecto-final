@@ -1,7 +1,10 @@
 const path = require("path");
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const bcryptHelper = require(path.join(
+  __dirname,
+  "..",
+  "helpers/bcrypt.helper"
+));
 
 const usersSchema = new mongoose.Schema(
   {
@@ -25,7 +28,7 @@ async function register(newUser, userAvatarURL) {
   try {
     const { email, password, name, age, address, phone } = newUser;
 
-    const encryptedPassword = await bcrypt.hash(password, saltRounds);
+    const encryptedPassword = await bcryptHelper.encryptPassword(password);
 
     const user = new User({
       email,

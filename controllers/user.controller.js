@@ -40,7 +40,7 @@ async function register(request, response) {
     });
   } catch (error) {
     response.status(404).json({
-      message: `Ocurrió un error al registrar el nuevo usuario ${error}`,
+      message: `Ocurrió un error al registrar el nuevo usuario`,
     });
   }
 }
