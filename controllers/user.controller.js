@@ -16,7 +16,7 @@ async function register(request, response) {
         message: `El mail: ${newUser.email} ya está en uso`,
       });
     }
-    const registeredUser = await usersModel.register(newUser, "my_avatar_url");
+    const registeredUser = await usersModel.register(newUser);
     const { email, avatar, name, age, address, phone } = registeredUser;
     await messageHelper.sendNewUserMessage(registeredUser);
     response.status(201).json({

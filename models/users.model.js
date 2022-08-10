@@ -5,6 +5,11 @@ const bcryptHelper = require(path.join(
   "..",
   "helpers/bcrypt.helper"
 ));
+const cloudinaryHelper = require(path.join(
+  __dirname,
+  "..",
+  `helpers/cloudinary.helper`
+));
 
 const usersSchema = new mongoose.Schema(
   {
@@ -24,16 +29,18 @@ const usersSchema = new mongoose.Schema(
 
 const User = mongoose.model("User", usersSchema);
 
-async function register(newUser, userAvatarURL) {
+async function register(newUser) {
   try {
-    const { email, password, name, age, address, phone } = newUser;
+    const { email, password, avatar, name, age, address, phone } = newUser;
 
     const encryptedPassword = await bcryptHelper.encryptPassword(password);
+
+    const avatarCloudinary = await cloudinaryHelper.uploadImage(avatar);
 
     const user = new User({
       email,
       password: encryptedPassword,
-      avatar: userAvatarURL,
+      avatar: avatarCloudinary,
       name,
       age,
       address,
