@@ -18,25 +18,17 @@ async function register(request, response) {
     }
     const registeredUser = await usersModel.register(newUser, "my_avatar_url");
     const { email, avatar, name, age, address, phone } = registeredUser;
-    await messageHelper.sendEmail(
-      "Nuevo registro",
-      "Gracias por registrarte",
-      `<div>
-          <h1>Alerta</h1>
-          <h2>Un usuario se ha registrado con los siguientes datos:</h2>
-            <ul>
-                <li>Email: ${email}</li>
-                <li>Avatar: <img src="${avatar}" alt="avatar" /></li>
-                <li>Nombre: ${name}</li>
-                <li>Edad: ${age}</li>
-                <li>Dirección: ${address}</li>
-                <li>Número de teléfono: ${phone}</li>
-            </ul>
-          </div>`
-    );
+    await messageHelper.sendNewUserMessage(registeredUser);
     response.status(200).json({
       message: "Nuevo usuario registrado con éxito",
-      registeredUser,
+      user: {
+        email,
+        avatar,
+        name,
+        age,
+        address,
+        phone,
+      },
     });
   } catch (error) {
     response.status(404).json({

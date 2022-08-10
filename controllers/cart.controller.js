@@ -127,23 +127,8 @@ async function checkout(request, response) {
       });
     }
     const { products } = cart;
-    await messageHelper.sendEmail(
-      `Nuevo pedido de: ${user.name}. Tel: ${user.phone}`,
-      "Nueva compra",
-      `<div>
-    <h1>Nuevo pedido de: ${user.name}. Tel: ${user.phone}</h1>
-    <h2>Productos del carrito:</h2>
-      <ul>
-          ${products.map((product) => {
-            return `<li>Product: ${product.id}</li>`;
-          })}
-      </ul>
-    </div>`
-    );
-    await messageHelper.sendSMS(
-      `¡Gracias por comprar con nosotros, ${user.name}! Su pedido está siendo procesado`,
-      user.phone
-    );
+    await messageHelper.sendNewOrderEmail(user);
+    await messageHelper.sendSMS(user);
     response.status(200).json({
       message: `Checkout realizado con éxito`,
       receipt: {
