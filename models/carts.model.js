@@ -1,26 +1,19 @@
 const path = require("path");
-const mongoose = require("mongoose");
 
-const cartSchema = new mongoose.Schema(
-  {
-    user: String,
-    products: [],
-    active: Boolean,
-  },
-  {
-    timestamps: true,
-  }
-);
+const Cart = require(path.join(__dirname, "..", "schemas/cart.mongo.schema"));
+const userModel = require(path.join(__dirname, "users.model"));
 
-const Cart = mongoose.model("Cart", cartSchema);
-function addOne(user) {
+async function addOne(user) {
   try {
+    const { address } = await userModel.findByEmail(user);
+
     const cart = new Cart({
       user: user,
       active: true,
+      address,
     });
 
-    cart.save();
+    await cart.save();
 
     return cart;
   } catch (error) {

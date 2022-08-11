@@ -7,10 +7,10 @@ const messageHelper = require(path.join(
   "helpers/messages.helper"
 ));
 
-function add(request, response) {
+async function add(request, response) {
   try {
-    const { user } = request.body;
-    const newCart = cartsModel.addOne(user);
+    const { user } = request.user;
+    const newCart = await cartsModel.addOne(user);
     response.status(201).json({
       message: "Nuevo carrito creado con éxito",
       newCart,
