@@ -14,7 +14,7 @@ async function getAll(request, response) {
     });
   } catch (error) {
     response.status(404).json({
-      message: "Hubo un error al recuperar la lista de álbumes",
+      message: "Hubo un error al recuperar la lista de productos",
     });
   }
 }
@@ -81,16 +81,16 @@ async function deleteOne(request, response) {
     const softDeletedProduct = await productsModel.deleteOne(id);
     if (!softDeletedProduct) {
       return response.status(404).json({
-        message: "Álbum no encontrado",
+        message: "Producto no encontrado",
       });
     }
     response.status(200).json({
-      message: "Álbum borrado con éxito",
+      message: "Producto borrado con éxito",
       softDeletedProduct,
     });
   } catch (error) {
     response.status(404).json({
-      message: "Hubo un error al borrar el álbum",
+      message: "Hubo un error al borrar el producto",
     });
   }
 }

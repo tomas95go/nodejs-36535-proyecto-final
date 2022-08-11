@@ -14,7 +14,9 @@ const cloudinaryHelper = require(path.join(
 
 async function getAll() {
   try {
-    const products = await Product.find();
+    const products = await Product.find({
+      active: true,
+    });
     return products;
   } catch (error) {
     throw "Hubo un error al obtener los productos";
@@ -23,7 +25,10 @@ async function getAll() {
 
 async function getOne(id) {
   try {
-    const product = await Product.findById(id);
+    const product = await Product.findOne({
+      id,
+      active: true,
+    });
     return product;
   } catch (error) {
     throw "Hubo un error al obtener el producto";
@@ -56,7 +61,8 @@ async function addOne(newProduct) {
 
 async function updateOne(id, newProduct) {
   try {
-    const { name, description, price, category, img, stock } = newProduct;
+    const { name, description, price, category, img, stock, active } =
+      newProduct;
 
     const imgCloudinary = await cloudinaryHelper.uploadImage(img);
 
@@ -69,6 +75,7 @@ async function updateOne(id, newProduct) {
         category,
         img: imgCloudinary,
         stock,
+        active,
       },
       {
         new: true,
