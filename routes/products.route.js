@@ -7,9 +7,12 @@ const productsController = require(path.join(
   "controllers/products.controller"
 ));
 
+const jwtHelper = require(path.join(__dirname, "..", `helpers/jwt.helper`));
 const adminHelper = require(path.join(__dirname, "..", "helpers/admin.helper"));
 
 const productsRouter = express.Router();
+
+productsRouter.use(jwtHelper.verify);
 
 productsRouter.get("/", productsController.getAll);
 productsRouter.get("/:id", productsController.getOne);
