@@ -56,15 +56,18 @@ async function addOne(newProduct) {
 
 async function updateOne(id, newProduct) {
   try {
-    const { name, description, price, code, img, stock } = newProduct;
+    const { name, description, price, category, img, stock } = newProduct;
+
+    const imgCloudinary = await cloudinaryHelper.uploadImage(img);
+
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
       {
         name,
         description,
         price,
-        code,
-        img,
+        category,
+        img: imgCloudinary,
         stock,
       },
       {

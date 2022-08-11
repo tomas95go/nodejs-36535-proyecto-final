@@ -61,16 +61,16 @@ async function updateOne(request, response) {
     const updatedProduct = await productsModel.updateOne(id, newProductData);
     if (!updatedProduct) {
       return response.status(404).json({
-        message: "Álbum no encontrado",
+        message: "Producto no encontrado",
       });
     }
     response.status(200).json({
-      message: "Álbum modificado con éxito",
+      message: "Producto modificado con éxito",
       updatedProduct,
     });
   } catch (error) {
     response.status(404).json({
-      message: "Hubo un error al actualizar el álbum",
+      message: "Hubo un error al modificar el producto",
     });
   }
 }
