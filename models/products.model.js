@@ -1,22 +1,16 @@
 const path = require("path");
-const mongoose = require("mongoose");
 
-const productSchema = new mongoose.Schema(
-  {
-    name: String,
-    description: String,
-    price: Number,
-    code: Number,
-    img: String,
-    stock: Number,
-    active: Boolean,
-  },
-  {
-    timestamps: true,
-  }
-);
+const Product = require(path.join(
+  __dirname,
+  "..",
+  "schemas/product.mongo.schema"
+));
 
-const Product = mongoose.model("Product", productSchema);
+const cloudinaryHelper = require(path.join(
+  __dirname,
+  "..",
+  `helpers/cloudinary.helper`
+));
 
 async function getAll() {
   try {
@@ -38,14 +32,16 @@ async function getOne(id) {
 
 async function addOne(newProduct) {
   try {
-    const { name, description, price, code, img, stock } = newProduct;
+    const { name, description, price, category, img, stock } = newProduct;
+
+    const imgCloudinary = await cloudinaryHelper.uploadImage(img);
 
     const product = new Product({
       name,
       description,
       price,
-      code,
-      img,
+      category,
+      img: imgCloudinary,
       stock,
       active: true,
     });

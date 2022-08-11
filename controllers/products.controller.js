@@ -44,12 +44,12 @@ async function addOne(request, response) {
     const newProduct = request.body;
     const addedProduct = await productsModel.addOne(newProduct);
     response.status(201).json({
-      message: "Nuevo álbum creado con éxito",
+      message: "Producto creado con éxito",
       addedProduct,
     });
   } catch (error) {
     response.status(404).json({
-      message: "Hubo un error al crear el álbum",
+      message: "Hubo un error al crear el producto",
     });
   }
 }
