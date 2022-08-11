@@ -13,7 +13,7 @@ const productsRouter = express.Router();
 
 productsRouter.get("/", productsController.getAll);
 productsRouter.get("/:id", productsController.getOne);
-productsRouter.post("/", productsController.addMany);
+productsRouter.post("/", productsController.addOne);
 productsRouter.put("/:id", productsController.updateOne);
 productsRouter.delete("/:id", productsController.deleteOne);
 

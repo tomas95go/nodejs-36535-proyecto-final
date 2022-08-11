@@ -1,16 +1,20 @@
 const path = require("path");
 const mongoose = require("mongoose");
 
-const productSchema = new mongoose.Schema({
-  name: String,
-  description: String,
-  price: Number,
-  code: Number,
-  img: String,
-  stock: Number,
-  active: Boolean,
-  timestamp: String,
-});
+const productSchema = new mongoose.Schema(
+  {
+    name: String,
+    description: String,
+    price: Number,
+    code: Number,
+    img: String,
+    stock: Number,
+    active: Boolean,
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const Product = mongoose.model("Product", productSchema);
 
@@ -34,8 +38,7 @@ async function getOne(id) {
 
 async function addOne(newProduct) {
   try {
-    const { name, description, price, code, img, stock, active, timestamp } =
-      newProduct;
+    const { name, description, price, code, img, stock } = newProduct;
 
     const product = new Product({
       name,
@@ -44,8 +47,7 @@ async function addOne(newProduct) {
       code,
       img,
       stock,
-      active,
-      timestamp,
+      active: true,
     });
 
     product.save();
