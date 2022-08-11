@@ -9,7 +9,7 @@ async function getAll(request, response) {
   try {
     const products = await productsModel.getAll();
     response.status(200).json({
-      message: "Lista de álbumes recuperada con éxito",
+      message: "Lista de productos recuperada con éxito",
       products,
     });
   } catch (error) {
@@ -25,16 +25,16 @@ async function getOne(request, response) {
     const product = await productsModel.getOne(id);
     if (!product) {
       return response.status(404).json({
-        message: "Álbum no encontrado",
+        message: "Producto no encontrado",
       });
     }
     response.status(200).json({
-      message: "Álbum encontrado con éxito",
+      message: "Producto encontrado con éxito",
       product,
     });
   } catch (error) {
     response.status(404).json({
-      message: "Hubo un error al buscar el álbum",
+      message: "Hubo un error al buscar el producto",
     });
   }
 }
