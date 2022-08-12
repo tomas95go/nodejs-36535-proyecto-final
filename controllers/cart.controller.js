@@ -63,11 +63,12 @@ async function getAllProducts(request, response) {
     });
   }
 }
+
 async function addManyProducts(request, response) {
   try {
     const id = request.params.id;
-    const newAlbums = request.body;
-    const cart = await cartsModel.addManyProducts(id, newAlbums);
+    const newProducts = request.body.products;
+    const cart = await cartsModel.addManyProducts(id, newProducts);
 
     if (!cart) {
       return response.status(404).json({
@@ -77,8 +78,8 @@ async function addManyProducts(request, response) {
 
     let message = "";
 
-    if (newAlbums.length > 1) {
-      message = `${newAlbums.length} productos agregados al carrito ${id} con éxito`;
+    if (newProducts.length > 1) {
+      message = `${newProducts.length} productos agregados al carrito ${id} con éxito`;
     } else {
       message = `Producto agregado al carrito ${id} con éxito`;
     }
@@ -93,6 +94,7 @@ async function addManyProducts(request, response) {
     });
   }
 }
+
 function deleteOneProduct(request, response) {
   try {
     const { id_cart, id_prod } = request.params;
