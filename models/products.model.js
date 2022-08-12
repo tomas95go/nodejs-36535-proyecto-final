@@ -25,13 +25,10 @@ async function getAll() {
 
 async function getOne(id) {
   try {
-    const product = await Product.findOne({
-      id,
-      active: true,
-    });
+    const product = await Product.findOne({ _id: id, active: true }).exec();
     return product;
   } catch (error) {
-    throw "Hubo un error al obtener el producto";
+    return null;
   }
 }
 
