@@ -1,6 +1,9 @@
 const path = require("path");
+
 const cartsModel = require(path.join(__dirname, "..", `models/carts.model`));
 const usersModel = require(path.join(__dirname, "..", `models/users.model`));
+const ordersModel = require(path.join(__dirname, "..", `models/orders.model`));
+
 const messageHelper = require(path.join(
   __dirname,
   "..",
@@ -128,15 +131,12 @@ async function checkout(request, response) {
         message: "Usuario del carrito no encontrado",
       });
     }
-    const { products } = cart;
-    await messageHelper.sendNewOrderEmail(user);
+    const order = await ordersModel.generateNewOrder(cart);
+    await messageHelper.sendNewOrderEmail(user, order.items);
     await messageHelper.sendNewOrderSMS(user);
     response.status(200).json({
       message: `Checkout realizado con éxito`,
-      receipt: {
-        user: user.email,
-        products,
-      },
+      order,
     });
   } catch (error) {
     response.status(404).json({

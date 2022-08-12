@@ -8,7 +8,7 @@ function generateOrderInProcessMessage(name) {
   const orderInProcessMessage = `¡Gracias por comprar con nosotros, ${name}! Su pedido está siendo procesado`;
   return orderInProcessMessage;
 }
-function generateNewOrderMessage(name, phone) {
+function generateNewOrderMessage(name, phone, items) {
   const msg = {
     to: process.env.PERSONAL_EMAIL,
     from: process.env.WORK_EMAIL,
@@ -18,8 +18,8 @@ function generateNewOrderMessage(name, phone) {
     <h1>Nuevo pedido de: ${name}. Tel: ${phone}</h1>
     <h2>Productos del carrito:</h2>
       <ul>
-          ${products.map((product) => {
-            return `<li>Product: ${product.id}</li>`;
+          ${items.map((item) => {
+            return `<li>Product: ${item.name}</li>`;
           })}
       </ul>
     </div>`,
@@ -49,10 +49,10 @@ function generateNewUserMessage(email, avatar, name, age, address, phone) {
   return msg;
 }
 
-async function sendNewOrderEmail(user) {
+async function sendNewOrderEmail(user, items) {
   try {
     const { name, phone } = user;
-    const msg = generateNewOrderMessage(name, phone);
+    const msg = generateNewOrderMessage(name, phone, items);
     const sentEmail = await sgMail.send(msg);
     return sentEmail;
   } catch (error) {
