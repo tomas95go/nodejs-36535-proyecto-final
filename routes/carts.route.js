@@ -10,11 +10,13 @@ cartRouter.use(jwtHelper.verify);
 
 cartRouter.post("/", cartController.add);
 cartRouter.delete("/:id", cartController.deleteOne);
+
 cartRouter.get("/:id/productos", cartController.getAllProducts);
-cartRouter.post("/:id/productos", cartController.addManyProducts);
+/*cartRouter.post("/:id/productos", cartController.addManyProducts);
+cartRouter.put("/:id/productos", cartController.updateManyProducts);
 cartRouter.delete(
   "/:id_cart/productos/:id_prod",
-  cartController.deleteOneProduct
-);
+  cartController.deleteManyProducts
+);*/
 
 module.exports = cartRouter;
