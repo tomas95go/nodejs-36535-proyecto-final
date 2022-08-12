@@ -39,6 +39,21 @@ async function getOne(request, response) {
   }
 }
 
+async function getAllByCategory(request, response) {
+  try {
+    const category = request.params.category;
+    const products = await productsModel.getAllByCategory(category);
+    response.status(200).json({
+      message: `Lista de productos de la categoría: ${category}, recuperada con éxito`,
+      products,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al listar los productos por su categoría",
+    });
+  }
+}
+
 async function addOne(request, response) {
   try {
     const newProduct = request.body;
@@ -98,6 +113,7 @@ async function deleteOne(request, response) {
 module.exports = {
   getAll,
   getOne,
+  getAllByCategory,
   addOne,
   updateOne,
   deleteOne,

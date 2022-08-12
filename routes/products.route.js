@@ -15,6 +15,7 @@ const productsRouter = express.Router();
 productsRouter.use(jwtHelper.verify);
 
 productsRouter.get("/", productsController.getAll);
+productsRouter.get("/:category", productsController.getAllByCategory);
 productsRouter.get("/:id", productsController.getOne);
 productsRouter.post("/", productsController.addOne);
 productsRouter.put("/:id", productsController.updateOne);

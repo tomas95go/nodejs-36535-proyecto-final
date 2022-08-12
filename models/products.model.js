@@ -35,6 +35,18 @@ async function getOne(id) {
   }
 }
 
+async function getAllByCategory(category) {
+  try {
+    const products = await Product.find({
+      active: true,
+      category,
+    });
+    return products;
+  } catch (error) {
+    throw "Hubo un error al obtener los productos por su categoría";
+  }
+}
+
 async function addOne(newProduct) {
   try {
     const { name, description, price, category, img, stock } = newProduct;
@@ -107,6 +119,7 @@ async function deleteOne(id) {
 module.exports = {
   getAll,
   getOne,
+  getAllByCategory,
   addOne,
   updateOne,
   deleteOne,
