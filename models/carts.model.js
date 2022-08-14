@@ -20,6 +20,15 @@ async function addOne(user) {
   }
 }
 
+async function getOneByIdAndEmail(id, user) {
+  try {
+    const cart = await Cart.findOne({ _id: id, user, active: true }).exec();
+    return cart;
+  } catch (error) {
+    throw "Hubo un error al encontrar el carrito";
+  }
+}
+
 async function getOne(email) {
   try {
     const cart = await Cart.findOne({
@@ -49,11 +58,18 @@ async function deleteOne(id) {
   }
 }
 
-async function addManyProducts(id, products) {
+async function addOneProduct(id, product) {
   try {
     const updatedCart = await Cart.findByIdAndUpdate(
       id,
-      { $push: { products: { $each: products } } },
+      {
+        $push: {
+          products: {
+            _id: product,
+            quantity: 1,
+          },
+        },
+      },
       {
         new: true,
       }
@@ -82,7 +98,8 @@ async function deleteOneProduct(cart_id, product_id) {
 module.exports = {
   addOne,
   getOne,
+  getOneByIdAndEmail,
   deleteOne,
-  addManyProducts,
+  addOneProduct,
   deleteOneProduct,
 };

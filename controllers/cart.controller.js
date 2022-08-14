@@ -52,11 +52,12 @@ async function getAllProducts(request, response) {
   }
 }
 
-async function addManyProducts(request, response) {
+async function addOneProduct(request, response) {
   try {
-    const id = request.params.id;
-    const newProducts = request.body.products;
-    const cart = await cartsModel.addManyProducts(id, newProducts);
+    const { user } = request.user;
+    const { id } = request.params;
+    const { _id: id_product } = request.body;
+    const cart = await cartsModel.getOneByIdAndEmail(id, user);
 
     if (!cart) {
       return response.status(404).json({
@@ -64,17 +65,20 @@ async function addManyProducts(request, response) {
       });
     }
 
-    let message = "";
+    const isProductInCart = cart.products.find(({ _id }) => _id === id_product);
 
-    if (newProducts.length > 1) {
-      message = `${newProducts.length} productos agregados al carrito ${id} con éxito`;
-    } else {
-      message = `Producto agregado al carrito ${id} con éxito`;
+    if (isProductInCart) {
+      return response.status(400).json({
+        message:
+          "El producto que intenta agregar ya se encuentra presente en el carrito",
+      });
     }
 
+    const cartWithNewProduct = await cartsModel.addOneProduct(id, id_product);
+
     response.status(201).json({
-      message,
-      cart,
+      message: `Se ha agregado con éxito el nuevo producto: ${id_product} al carrito: ${id}`,
+      cartWithNewProduct,
     });
   } catch (error) {
     response.status(404).json({
@@ -121,7 +125,7 @@ async function checkout(request, response) {
 module.exports = {
   deleteOne,
   getAllProducts,
-  addManyProducts,
+  addOneProduct,
   deleteOneProduct,
   checkout,
 };

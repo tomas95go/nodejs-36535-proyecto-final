@@ -9,8 +9,9 @@ const cartRouter = express.Router();
 cartRouter.use(jwtHelper.verify);
 
 cartRouter.get("/:id/productos", cartController.getAllProducts);
-cartRouter.post("/:id/productos", cartController.addOne);
-cartRouter.put("/:id/productos/:id_producto", cartController.updateOne);
-cartRouter.delete("/:id/productos/:id_producto", cartController.deleteOne);
+cartRouter.post("/:id/productos", cartController.addOneProduct);
+/*cartRouter.put("/:id/productos/:id_producto/agregar", cartController.increaseOneProductQuantity);
+cartRouter.put("/:id/productos/:id_producto/restar", cartController.decreaseOneProductQuantity)
+cartRouter.delete("/:id/productos/:id_producto", cartController.deleteOneProduct);*/
 
 module.exports = cartRouter;
