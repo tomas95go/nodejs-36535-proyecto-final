@@ -146,7 +146,6 @@ async function checkout(request, response) {
 }
 
 module.exports = {
-  addOne,
   deleteOne,
   getAllProducts,
   addManyProducts,
