@@ -20,9 +20,12 @@ async function addOne(user) {
   }
 }
 
-async function getOne(id) {
+async function getOne(email) {
   try {
-    const cart = await Cart.findById(id);
+    const cart = await Cart.findOne({
+      user: email,
+      active: true,
+    });
     return cart;
   } catch (error) {
     throw "Hubo un error al encontrar el carrito";

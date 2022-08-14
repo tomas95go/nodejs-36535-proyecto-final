@@ -2,14 +2,14 @@ const path = require("path");
 
 const Order = require(path.join(__dirname, "..", "schemas/order.mongo.schema"));
 
-async function generateNewOrder(cart) {
+async function generateNewOrder(user, products) {
   try {
     const nextOrderNumber = await getNextOrderNumber();
     const order = new Order({
       number: nextOrderNumber,
       status: "generada",
-      user: cart.user,
-      items: cart.products,
+      user: user,
+      items: products,
     });
 
     await order.save();

@@ -4,12 +4,6 @@ const cartsModel = require(path.join(__dirname, "..", `models/carts.model`));
 const usersModel = require(path.join(__dirname, "..", `models/users.model`));
 const ordersModel = require(path.join(__dirname, "..", `models/orders.model`));
 
-const validatorHelper = require(path.join(
-  __dirname,
-  "..",
-  "helpers/validator.helper"
-));
-
 const messageHelper = require(path.join(
   __dirname,
   "..",
@@ -109,31 +103,10 @@ function deleteOneProduct(request, response) {
 
 async function checkout(request, response) {
   try {
-    const id = request.params.id_cart;
-    const cart = await cartsModel.getOne(id);
-    const user = await usersModel.findByEmail(cart.user);
-    if (!cart) {
-      return response.status(404).json({
-        message: "Carrito no encontrado",
-      });
-    }
-    if (!user) {
-      return response.status(404).json({
-        message: "Usuario del carrito no encontrado",
-      });
-    }
-
-    const orderIsValid = validatorHelper.validateOrderSchema(cart);
-    console.log(orderIsValid.errors);
-    if (orderIsValid.errors) {
-      return response.status(400).json({
-        message: "El formato de los datos no es correcto",
-        errors: orderIsValid.errors,
-      });
-    }
-    const order = await ordersModel.generateNewOrder(cart);
-    await messageHelper.sendNewOrderEmail(user, order.items);
-    await messageHelper.sendNewOrderSMS(user);
+    const { user, phone, products } = request.body;
+    const order = await ordersModel.generateNewOrder(user, products);
+    /*await messageHelper.sendNewOrderEmail(userData, order.items);
+    await messageHelper.sendNewOrderSMS(userData);*/
     response.status(200).json({
       message: `Checkout realizado con éxito`,
       order,
