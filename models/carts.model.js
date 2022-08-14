@@ -1,14 +1,13 @@
 const path = require("path");
 
 const Cart = require(path.join(__dirname, "..", "schemas/cart.mongo.schema"));
-const userModel = require(path.join(__dirname, "users.model"));
 
 async function addOne(user) {
   try {
-    const { address } = await userModel.findByEmail(user);
+    const { email, address } = user;
 
     const cart = new Cart({
-      user: user,
+      user: email,
       active: true,
       address,
     });
