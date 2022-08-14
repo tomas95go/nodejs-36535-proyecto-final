@@ -16,15 +16,6 @@ const messageHelper = require(path.join(
   "helpers/messages.helper"
 ));
 
-async function addOne(user) {
-  try {
-    const newCart = await cartsModel.addOne(user);
-    return newCart;
-  } catch (error) {
-    throw "Hubo un error al crear el carrito";
-  }
-}
-
 async function deleteOne(request, response) {
   try {
     const id = request.params.id;

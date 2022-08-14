@@ -1,5 +1,8 @@
 const path = require("path");
+
 const usersModel = require(path.join(__dirname, "..", "models/users.model"));
+const cartsModel = require(path.join(__dirname, "..", `models/carts.model`));
+
 const messageHelper = require(path.join(
   __dirname,
   "..",
@@ -18,6 +21,7 @@ async function register(request, response) {
     }
     const registeredUser = await usersModel.register(newUser);
     const { email, avatar, name, age, address, phone } = registeredUser;
+    const cart = await cartsModel.addOne(registeredUser);
     await messageHelper.sendNewUserMessage(registeredUser);
     response.status(201).json({
       message: "Nuevo usuario registrado con éxito",
@@ -29,6 +33,7 @@ async function register(request, response) {
         address,
         phone,
       },
+      cart,
     });
   } catch (error) {
     response.status(404).json({
