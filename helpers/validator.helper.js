@@ -26,18 +26,19 @@ async function validateUserSchema(request, response, next) {
   }
 }
 
-async function validateOrderSchema(cart) {
+async function validateOrderSchema(request, response, next) {
   try {
-    const isOrderValid = await orderSchema.validateAsync(
-      { user: cart.user },
-      {
-        abortEarly: false,
-      }
-    );
-    return isOrderValid;
+    const temporaryOrder = request.body;
+    await orderSchema.validateAsync(temporaryOrder, {
+      abortEarly: false,
+    });
+    next();
   } catch (error) {
     const errors = error.details.map((detail) => detail.message);
-    return { errors };
+    return response.status(400).json({
+      message: "El formato de los datos no es correcto",
+      errors,
+    });
   }
 }
 

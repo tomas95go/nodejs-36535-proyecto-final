@@ -19,7 +19,7 @@ const validatorHelper = require(path.join(
 checkoutRouter.post(
   "/",
   jwtHelper.verify,
-  //validatorHelper.validateOrderSchema,
+  validatorHelper.validateOrderSchema,
   cartController.checkout
 );
 

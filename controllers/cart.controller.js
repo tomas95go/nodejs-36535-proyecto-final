@@ -104,13 +104,13 @@ function deleteOneProduct(request, response) {
 async function checkout(request, response) {
   try {
     const { user, phone, products } = request.body;
-    const order = await ordersModel.generateNewOrder(user, products);
-    /*await messageHelper.sendNewOrderEmail(userData, order.items);
-    await messageHelper.sendNewOrderSMS(userData);*/
+    /*const order = await ordersModel.generateNewOrder(user, products);
+    await messageHelper.sendNewOrderEmail(userData, order.items);
+    await messageHelper.sendNewOrderSMS(userData);
     response.status(200).json({
       message: `Checkout realizado con éxito`,
       order,
-    });
+    });*/
   } catch (error) {
     response.status(404).json({
       message: "Hubo un error al realizar el checkout del carrito",
