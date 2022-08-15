@@ -125,7 +125,22 @@ async function deleteOneProduct(id, product_id) {
     );
     return updatedCart;
   } catch (error) {
-    throw `Hubo un error al eliminar el producto del carrito ${error}`;
+    throw "Hubo un error al eliminar el producto del carrito";
+  }
+}
+
+async function emptyCartProducts(id) {
+  try {
+    const updatedCart = await Cart.findOneAndUpdate(
+      { _id: id },
+      { $set: { products: [] } },
+      {
+        new: true,
+      }
+    );
+    return updatedCart;
+  } catch (error) {
+    throw "Hubo un error al vaciar los productos del carrito";
   }
 }
 
@@ -138,4 +153,5 @@ module.exports = {
   increaseOneProductQuantity,
   decreaseOneProductQuantity,
   deleteOneProduct,
+  emptyCartProducts,
 };

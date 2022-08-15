@@ -227,6 +227,8 @@ async function checkout(request, response) {
 
     await messageHelper.sendNewOrderSMS(user);
 
+    await cartsModel.emptyCartProducts(id);
+
     response.status(200).json({
       message: `Checkout realizado con éxito`,
       order,
