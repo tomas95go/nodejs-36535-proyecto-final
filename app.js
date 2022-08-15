@@ -6,9 +6,10 @@ const cartsRouter = require(`${__dirname}/routes/carts.route`);
 const registerRouter = require(`${__dirname}/routes/register.route`);
 const loginRouter = require(`${__dirname}/routes/login.route`);
 const logoutRouter = require(`${__dirname}/routes/logout.route`);
-const routeHelper = require(`${__dirname}/helpers/route.helper`);
 const checkoutRouter = require(`${__dirname}/routes/checkout.route`);
 const profileRouter = require(`${__dirname}/routes/profile.route`);
+
+const routeHelper = require(`${__dirname}/helpers/route.helper`);
 
 const app = express();
 
