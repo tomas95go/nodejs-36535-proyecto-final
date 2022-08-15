@@ -170,6 +170,14 @@ async function deleteOneProduct(request, response) {
       });
     }
 
+    const isProductInCart = cart.products.find(({ _id }) => _id === id_product);
+
+    if (!isProductInCart) {
+      return response.status(400).json({
+        message: `El producto: ${id_product} no esta presente en el carrito`,
+      });
+    }
+
     const deletedProduct = await cartsModel.deleteOneProduct(id, id_product);
 
     response.status(200).json({
