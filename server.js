@@ -1,10 +1,8 @@
 const path = require("path");
-const http = require("http");
+
+const server = require(path.join(__dirname, "helpers/server.helper"));
 
 const database = require(path.join(__dirname, "/config"));
-const app = require(path.join(__dirname, "/app"));
-
-const server = http.createServer(app);
 const PORT = process.env.PORT || 8080;
 
 database.connect();
