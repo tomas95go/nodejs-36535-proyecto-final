@@ -19,7 +19,8 @@ function generateNewOrderMessage(name, phone, items) {
     <h2>Productos del carrito:</h2>
       <ul>
           ${items.map((item) => {
-            return `<li>Product: ${item.name}</li>`;
+            return `<li>Product: ${item._id}</li>
+            <li>Quantity: ${item.quantity}</li>`;
           })}
       </ul>
     </div>`,

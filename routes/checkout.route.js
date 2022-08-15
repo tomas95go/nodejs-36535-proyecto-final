@@ -10,17 +10,7 @@ const cartController = require(path.join(
 ));
 
 const jwtHelper = require(path.join(__dirname, "..", `helpers/jwt.helper`));
-const validatorHelper = require(path.join(
-  __dirname,
-  "..",
-  "helpers/validator.helper"
-));
 
-checkoutRouter.post(
-  "/",
-  jwtHelper.verify,
-  validatorHelper.validateOrderSchema,
-  cartController.checkout
-);
+checkoutRouter.post("/:id", jwtHelper.verify, cartController.checkout);
 
 module.exports = checkoutRouter;

@@ -194,14 +194,43 @@ async function deleteOneProduct(request, response) {
 
 async function checkout(request, response) {
   try {
-    const { user, phone, products } = request.body;
-    /*const order = await ordersModel.generateNewOrder(user, products);
-    await messageHelper.sendNewOrderEmail(userData, order.items);
-    await messageHelper.sendNewOrderSMS(userData);
+    const id = request.params.id;
+
+    const { user: email } = request.user;
+
+    const cart = await cartsModel.getOneByIdAndEmail(id, email);
+
+    if (!cart) {
+      return response.status(404).json({
+        message: "Carrito no encontrado",
+      });
+    }
+
+    if (!cart.products.length) {
+      return response.status(404).json({
+        message:
+          "Su carrito no contiene productos, no puede realizar el checkout",
+      });
+    }
+
+    const user = await usersModel.findByEmail(email);
+
+    if (!user) {
+      return response.status(404).json({
+        message: "Usuario del carrito no encontrado",
+      });
+    }
+
+    const order = await ordersModel.generateNewOrder(user.email, cart.products);
+
+    await messageHelper.sendNewOrderEmail(user, order.items);
+
+    await messageHelper.sendNewOrderSMS(user);
+
     response.status(200).json({
       message: `Checkout realizado con éxito`,
       order,
-    });*/
+    });
   } catch (error) {
     response.status(404).json({
       message: "Hubo un error al realizar el checkout del carrito",
