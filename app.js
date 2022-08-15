@@ -8,6 +8,7 @@ const loginRouter = require(`${__dirname}/routes/login.route`);
 const logoutRouter = require(`${__dirname}/routes/logout.route`);
 const checkoutRouter = require(`${__dirname}/routes/checkout.route`);
 const profileRouter = require(`${__dirname}/routes/profile.route`);
+const chatRouter = require(`${__dirname}/routes/chat.route`);
 
 const routeHelper = require(`${__dirname}/helpers/route.helper`);
 
@@ -21,6 +22,7 @@ app.use("/api/productos", productsRouter);
 app.use("/api/carrito", cartsRouter);
 app.use("/api/checkout", checkoutRouter);
 app.use("/api/profile", profileRouter);
+app.use("/api/chat", chatRouter);
 app.use(routeHelper.checkRoute);
 
 module.exports = app;
