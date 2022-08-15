@@ -36,7 +36,7 @@ async function getAllByCategory(category) {
   try {
     const products = await Product.find({
       active: true,
-      category,
+      category: category,
     });
     return products;
   } catch (error) {

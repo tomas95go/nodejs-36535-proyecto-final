@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    collation: { locale: "en_US", strength: 1 },
   }
 );
 

@@ -41,8 +41,14 @@ async function getOne(request, response) {
 
 async function getAllByCategory(request, response) {
   try {
-    const category = request.params.category;
+    const category = request.params.category.toLowerCase();
     const products = await productsModel.getAllByCategory(category);
+    if (!products.length) {
+      return response.status(404).json({
+        message: `No existen productos de la categoría: ${category}`,
+      });
+    }
+
     response.status(200).json({
       message: `Lista de productos de la categoría: ${category}, recuperada con éxito`,
       products,
