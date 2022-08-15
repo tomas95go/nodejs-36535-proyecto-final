@@ -97,6 +97,23 @@ async function increaseOneProductQuantity(id, product) {
   }
 }
 
+async function decreaseOneProductQuantity(id, product) {
+  try {
+    const updatedCart = await Cart.findOneAndUpdate(
+      { _id: id, "products._id": product },
+      {
+        $inc: { "products.$.quantity": -1 },
+      },
+      {
+        new: true,
+      }
+    );
+    return updatedCart;
+  } catch (error) {
+    throw "Hubo un error al incrementar la cantidad del producto";
+  }
+}
+
 async function deleteOneProduct(cart_id, product_id) {
   try {
     const updatedCart = await Cart.findByIdAndUpdate(
@@ -119,5 +136,6 @@ module.exports = {
   deleteOne,
   addOneProduct,
   increaseOneProductQuantity,
+  decreaseOneProductQuantity,
   deleteOneProduct,
 };

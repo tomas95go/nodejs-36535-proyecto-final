@@ -14,7 +14,10 @@ cartRouter.put(
   "/:id/productos/:id_product/incrementar",
   cartController.increaseOneProductQuantity
 );
-/*cartRouter.put("/:id/productos/:id_producto/restar", cartController.decreaseOneProductQuantity)
-cartRouter.delete("/:id/productos/:id_producto", cartController.deleteOneProduct);*/
+cartRouter.put(
+  "/:id/productos/:id_product/decrementar",
+  cartController.decreaseOneProductQuantity
+);
+/*cartRouter.delete("/:id/productos/:id_producto", cartController.deleteOneProduct);*/
 
 module.exports = cartRouter;

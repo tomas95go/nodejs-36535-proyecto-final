@@ -122,6 +122,41 @@ async function increaseOneProductQuantity(request, response) {
   }
 }
 
+async function decreaseOneProductQuantity(request, response) {
+  try {
+    const { id, id_product } = request.params;
+    const { user } = request.user;
+    const cart = await cartsModel.getOneByIdAndEmail(id, user);
+
+    if (!cart) {
+      return response.status(404).json({
+        message: "Carrito no encontrado",
+      });
+    }
+
+    const isProductInCart = cart.products.find(({ _id }) => _id === id_product);
+
+    if (!isProductInCart) {
+      return response.status(400).json({
+        message: `El producto: ${id_product} no esta presente en el carrito`,
+      });
+    }
+
+    const updatedProduct = await cartsModel.decreaseOneProductQuantity(
+      id,
+      id_product
+    );
+    response.status(200).json({
+      message: `Se ha decrementado con éxito la cantidad del producto: ${id_product} en el carrito: ${id}`,
+      updatedProduct,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al decrementar la cantidad del producto",
+    });
+  }
+}
+
 function deleteOneProduct(request, response) {
   try {
     const { id_cart, id_prod } = request.params;
@@ -162,6 +197,7 @@ module.exports = {
   getAllProducts,
   addOneProduct,
   increaseOneProductQuantity,
+  decreaseOneProductQuantity,
   deleteOneProduct,
   checkout,
 };
