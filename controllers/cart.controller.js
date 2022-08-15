@@ -33,7 +33,8 @@ async function deleteOne(request, response) {
 async function getAllProducts(request, response) {
   try {
     const id = request.params.id;
-    const cart = await cartsModel.getOne(id);
+    const { user } = request.user;
+    const cart = await cartsModel.getOneByIdAndEmail(id, user);
 
     if (!cart) {
       return response.status(404).json({
