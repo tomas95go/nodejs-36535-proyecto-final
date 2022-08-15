@@ -41,7 +41,7 @@ async function getOne(request, response) {
 
 async function getAllByCategory(request, response) {
   try {
-    const category = request.params.category.toLowerCase();
+    const category = request.params.category;
     const products = await productsModel.getAllByCategory(category);
     if (!products.length) {
       return response.status(404).json({
