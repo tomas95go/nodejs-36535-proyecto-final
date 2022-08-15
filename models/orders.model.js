@@ -23,7 +23,7 @@ async function generateNewOrder(user, products) {
 async function getNextOrderNumber() {
   try {
     const nextOrderNumber = Order.find().count();
-    return nextOrderNumber ? 1 : nextOrderNumber;
+    return nextOrderNumber ? nextOrderNumber : 1;
   } catch (error) {
     throw "No se pudo recuperar el número de orden";
   }
