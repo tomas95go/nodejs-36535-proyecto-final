@@ -76,7 +76,24 @@ async function addOneProduct(id, product) {
     );
     return updatedCart;
   } catch (error) {
-    throw "Hubo un error al agregar porductos al carrito";
+    throw "Hubo un error al agregar el producto al carrito";
+  }
+}
+
+async function increaseOneProductQuantity(id, product) {
+  try {
+    const updatedCart = await Cart.findOneAndUpdate(
+      { _id: id, "products._id": product },
+      {
+        $inc: { "products.$.quantity": 1 },
+      },
+      {
+        new: true,
+      }
+    );
+    return updatedCart;
+  } catch (error) {
+    throw "Hubo un error al incrementar la cantidad del producto";
   }
 }
 
@@ -101,5 +118,6 @@ module.exports = {
   getOneByIdAndEmail,
   deleteOne,
   addOneProduct,
+  increaseOneProductQuantity,
   deleteOneProduct,
 };
