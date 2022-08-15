@@ -114,18 +114,18 @@ async function decreaseOneProductQuantity(id, product) {
   }
 }
 
-async function deleteOneProduct(cart_id, product_id) {
+async function deleteOneProduct(id, product_id) {
   try {
-    const updatedCart = await Cart.findByIdAndUpdate(
-      cart_id,
-      { $pull: { products: { id: product_id } } },
+    const updatedCart = await Cart.findOneAndUpdate(
+      { _id: id },
+      { $pull: { products: { _id: product_id } } },
       {
         new: true,
       }
     );
     return updatedCart;
   } catch (error) {
-    throw "Hubo un error al eliminar porductos del carrito";
+    throw `Hubo un error al eliminar el producto del carrito ${error}`;
   }
 }
 

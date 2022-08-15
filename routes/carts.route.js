@@ -18,6 +18,9 @@ cartRouter.put(
   "/:id/productos/:id_product/decrementar",
   cartController.decreaseOneProductQuantity
 );
-/*cartRouter.delete("/:id/productos/:id_producto", cartController.deleteOneProduct);*/
+cartRouter.delete(
+  "/:id/productos/:id_product",
+  cartController.deleteOneProduct
+);
 
 module.exports = cartRouter;

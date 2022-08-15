@@ -157,16 +157,24 @@ async function decreaseOneProductQuantity(request, response) {
   }
 }
 
-function deleteOneProduct(request, response) {
+async function deleteOneProduct(request, response) {
   try {
-    const { id_cart, id_prod } = request.params;
-    const cartId = id_cart;
-    const productId = Number(id_prod);
+    const { id, id_product } = request.params;
+    const { user } = request.user;
 
-    cartsModel.deleteOneProduct(cartId, productId);
+    const cart = await cartsModel.getOneByIdAndEmail(id, user);
+
+    if (!cart) {
+      return response.status(404).json({
+        message: "Carrito no encontrado",
+      });
+    }
+
+    const deletedProduct = await cartsModel.deleteOneProduct(id, id_product);
 
     response.status(200).json({
-      message: `Producto: ${id_prod} borrado del carrito: ${id_cart} con éxito`,
+      message: `Producto: ${id_product} borrado del carrito: ${id} con éxito`,
+      deletedProduct,
     });
   } catch (error) {
     response.status(404).json({
