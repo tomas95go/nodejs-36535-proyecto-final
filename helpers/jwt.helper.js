@@ -3,7 +3,9 @@ const jwt = require("jsonwebtoken");
 function generateToken(user) {
   try {
     const jwtSecretKey = process.env.JWT_SECRET_KEY;
-    const token = jwt.sign({ user }, jwtSecretKey, { expiresIn: "1h" });
+    const token = jwt.sign({ user }, jwtSecretKey, {
+      expiresIn: process.env.JWT_EXPIRATION_TIME,
+    });
     return token;
   } catch (error) {
     throw `Hubo un error al generar el token JWT`;
