@@ -24,7 +24,28 @@ async function getAllChats(request, response) {
   }
 }
 
-async function createChat(request, response) {}
+async function createChat(request, response) {
+  try {
+    const { user } = request.user;
+    const createdChat = await chatModel.createChat(user, request.body.subject);
+    const { emitter, receiver, subject, room, status } = createdChat;
+    const chat = {
+      emitter,
+      receiver,
+      subject,
+      room,
+      status,
+    };
+    response.status(201).json({
+      message: `Se ha creado la sala de chat con éxito`,
+      chat,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al crear la sala de chat",
+    });
+  }
+}
 
 async function sendUserMessage(request, response) {}
 

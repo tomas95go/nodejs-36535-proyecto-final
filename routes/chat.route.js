@@ -14,12 +14,7 @@ const jwtHelper = require(path.join(__dirname, "..", "helpers/jwt.helper"));
 chatRouter.use(jwtHelper.verify);
 
 chatRouter.get("/:user", chatController.getAllChats);
-chatRouter.get("/create/:user", chatController.createChat);
-chatRouter.get("/send/message/:user", chatController.sendUserMessage);
-chatRouter.get(
-  "/send/message/:administrator",
-  chatController.sendAdministratorMessage
-);
+chatRouter.post("/create", chatController.createChat);
 chatRouter.get("/terminate/:chat_id/:user", chatController.terminateChatByUser);
 chatRouter.get(
   "/terminate/:chat_id/:admnistrator",
