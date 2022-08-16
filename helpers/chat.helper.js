@@ -6,11 +6,14 @@ const chatController = require(path.join(
   "controllers/chat.controller"
 ));
 
-async function handleCustomerMessage(io, message, chatId) {
+async function handleCustomerMessage(io, room, message, chatId) {
   try {
     await chatController.saveUserMessage(message, chatId);
+    io.to(room).emit("new-customer-message-ui", message);
   } catch (error) {
-    console.log(error);
+    io.to(room).emit("new-customer-message-ui", {
+      error,
+    });
   }
 }
 

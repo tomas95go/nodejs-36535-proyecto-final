@@ -50,10 +50,10 @@ async function createChat(request, response) {
 
 async function saveUserMessage(message, chatId) {
   try {
-    const m = await chatModel.saveUserMessage(chatId, message);
-    return m;
+    const storedMessage = await chatModel.saveUserMessage(chatId, message);
+    return storedMessage;
   } catch (error) {
-    return null;
+    throw "Hubo un error al guardar el mensaje del cliente";
   }
 }
 

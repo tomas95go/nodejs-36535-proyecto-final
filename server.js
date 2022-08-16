@@ -29,15 +29,12 @@ io.on("connection", (socket) => {
   const chatId = socket.handshake.query["chat-id"];
   socket.join(room);
   socket.on("new-customer-message", (msg) => {
-    //io.to(room).emit("wea", "xd");
-    chatHelper.handleCustomerMessage(io, msg, chatId);
+    chatHelper.handleCustomerMessage(io, room, msg, chatId);
   });
   socket.on("new-administrator-message", (msg) => {
     chatHelper.handleAdministratorMessage(io, msg);
   });
 });
-
-io.to;
 
 server.listen(PORT, () => {
   console.log(`App running on port: ${PORT}. URL: http://localhost:${PORT}`);
