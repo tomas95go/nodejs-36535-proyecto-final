@@ -34,7 +34,18 @@ function verify(request, response, next) {
   }
 }
 
+function socketIOVerify(token) {
+  try {
+    const jwtSecretKey = process.env.JWT_SECRET_KEY;
+    const isJWTValid = jwt.verify(token, jwtSecretKey);
+    return isJWTValid;
+  } catch (error) {
+    return null;
+  }
+}
+
 module.exports = {
   generateToken,
   verify,
+  socketIOVerify,
 };
