@@ -28,8 +28,9 @@ async function createChat(request, response) {
   try {
     const { user } = request.user;
     const createdChat = await chatModel.createChat(user, request.body.subject);
-    const { emitter, receiver, subject, room, status } = createdChat;
+    const { _id, emitter, receiver, subject, room, status } = createdChat;
     const chat = {
+      _id,
       emitter,
       receiver,
       subject,
@@ -47,7 +48,14 @@ async function createChat(request, response) {
   }
 }
 
-async function sendUserMessage(request, response) {}
+async function saveUserMessage(message, chatId) {
+  try {
+    const m = await chatModel.saveUserMessage(chatId, message);
+    return m;
+  } catch (error) {
+    return null;
+  }
+}
 
 async function sendAdministratorMessage(request, response) {}
 
@@ -58,7 +66,7 @@ async function terminateChatByAdministrator(request, response) {}
 module.exports = {
   getAllChats,
   createChat,
-  sendUserMessage,
+  saveUserMessage,
   sendAdministratorMessage,
   terminateChatByUser,
   terminateChatByAdministrator,

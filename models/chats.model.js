@@ -35,7 +35,22 @@ async function createChat(user, subject) {
   }
 }
 
-async function sendUserMessage() {}
+async function saveUserMessage(id, message) {
+  try {
+    const updatedChat = await Chat.findByIdAndUpdate(
+      id,
+      {
+        $push: { messages: message },
+      },
+      {
+        new: true,
+      }
+    );
+    return updatedChat;
+  } catch (error) {
+    throw "Hubo un error al guardar el mensaje del cliente";
+  }
+}
 
 async function sendAdministratorMessage() {}
 
@@ -55,7 +70,7 @@ async function getNextRoomNumber() {
 module.exports = {
   getAllChats,
   createChat,
-  sendUserMessage,
+  saveUserMessage,
   sendAdministratorMessage,
   terminateChatByUser,
   terminateChatByAdministrator,

@@ -6,9 +6,9 @@ const chatController = require(path.join(
   "controllers/chat.controller"
 ));
 
-async function handleCustomerMessage(io, message) {
+async function handleCustomerMessage(io, message, chatId) {
   try {
-    console.log(`handleCustomerMessage: ${message}`);
+    await chatController.saveUserMessage(message, chatId);
   } catch (error) {
     console.log(error);
   }
