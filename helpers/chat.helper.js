@@ -8,7 +8,12 @@ const chatController = require(path.join(
 
 async function handleCustomerMessage(io, room, message, chatId) {
   try {
-    await chatController.saveUserMessage(message, chatId);
+    const { user, text } = message;
+    const newCustomerMessage = {
+      user,
+      message: text,
+    };
+    await chatController.saveUserMessage(newCustomerMessage, chatId);
     io.to(room).emit("new-customer-message-ui", message);
   } catch (error) {
     io.to(room).emit("new-customer-message-ui", {
