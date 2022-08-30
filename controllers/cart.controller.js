@@ -1,33 +1,19 @@
 const path = require("path");
-const cartsDao = require(path.join(__dirname, "..", `daos/carts.dao`));
-const usersDao = require(path.join(__dirname, "..", `daos/users.dao`));
+
+const cartsModel = require(path.join(__dirname, "..", `models/carts.model`));
+const usersModel = require(path.join(__dirname, "..", `models/users.model`));
+const ordersModel = require(path.join(__dirname, "..", `models/orders.model`));
+
 const messageHelper = require(path.join(
   __dirname,
   "..",
   "helpers/messages.helper"
 ));
-const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
-
-function add(request, response) {
-  try {
-    const { user } = request.body;
-    const newCart = cartsDao.addOne(user);
-    response.status(201).json({
-      message: "Nuevo carrito creado con éxito",
-      newCart,
-    });
-  } catch (error) {
-    logger.log("error", `Hubo un error al crear el carrito ${error}`);
-    response.status(404).json({
-      message: "Hubo un error al crear el carrito",
-    });
-  }
-}
 
 async function deleteOne(request, response) {
   try {
     const id = request.params.id;
-    const cart = await cartsDao.deleteOne(id);
+    const cart = await cartsModel.deleteOne(id);
     if (!cart) {
       return response.status(404).json({
         message: "Carrito no encontrado",
@@ -38,7 +24,6 @@ async function deleteOne(request, response) {
       cart,
     });
   } catch (error) {
-    logger.log("error", `Hubo un error al borrar el carrito ${error}`);
     response.status(404).json({
       message: "Hubo un error al borrar el carrito",
     });
@@ -48,7 +33,8 @@ async function deleteOne(request, response) {
 async function getAllProducts(request, response) {
   try {
     const id = request.params.id;
-    const cart = await cartsDao.getOne(id);
+    const { user } = request.user;
+    const cart = await cartsModel.getOneByIdAndEmail(id, user);
 
     if (!cart) {
       return response.status(404).json({
@@ -61,20 +47,18 @@ async function getAllProducts(request, response) {
       products,
     });
   } catch (error) {
-    logger.log(
-      "error",
-      `Hubo un error al recuperar los productos del carrito ${error}`
-    );
     response.status(404).json({
       message: "Hubo un error al recuperar los productos del carrito",
     });
   }
 }
-async function addManyProducts(request, response) {
+
+async function addOneProduct(request, response) {
   try {
-    const id = request.params.id;
-    const newAlbums = request.body;
-    const cart = await cartsDao.addManyProducts(id, newAlbums);
+    const { user } = request.user;
+    const { id } = request.params;
+    const { _id: id_product } = request.body;
+    const cart = await cartsModel.getOneByIdAndEmail(id, user);
 
     if (!cart) {
       return response.status(404).json({
@@ -82,44 +66,126 @@ async function addManyProducts(request, response) {
       });
     }
 
-    let message = "";
+    const isProductInCart = cart.products.find(({ _id }) => _id === id_product);
 
-    if (newAlbums.length > 1) {
-      message = `${newAlbums.length} productos agregados al carrito ${id} con éxito`;
-    } else {
-      message = `Producto agregado al carrito ${id} con éxito`;
+    if (isProductInCart) {
+      return response.status(400).json({
+        message:
+          "El producto que intenta agregar ya se encuentra presente en el carrito",
+      });
     }
 
+    const cartWithNewProduct = await cartsModel.addOneProduct(id, id_product);
+
     response.status(201).json({
-      message,
-      cart,
+      message: `Se ha agregado con éxito el nuevo producto: ${id_product} al carrito: ${id}`,
+      cartWithNewProduct,
     });
   } catch (error) {
-    logger.log(
-      "error",
-      `Hubo un error al agregar productos al carrito ${error}`
-    );
     response.status(404).json({
       message: "Hubo un error al agregar productos al carrito",
     });
   }
 }
-function deleteOneProduct(request, response) {
+
+async function increaseOneProductQuantity(request, response) {
   try {
-    const { id_cart, id_prod } = request.params;
-    const cartId = id_cart;
-    const productId = Number(id_prod);
+    const { id, id_product } = request.params;
+    const { user } = request.user;
+    const cart = await cartsModel.getOneByIdAndEmail(id, user);
 
-    cartsDao.deleteOneProduct(cartId, productId);
+    if (!cart) {
+      return response.status(404).json({
+        message: "Carrito no encontrado",
+      });
+    }
 
+    const isProductInCart = cart.products.find(({ _id }) => _id === id_product);
+
+    if (!isProductInCart) {
+      return response.status(400).json({
+        message: `El producto: ${id_product} no esta presente en el carrito`,
+      });
+    }
+
+    const updatedProduct = await cartsModel.increaseOneProductQuantity(
+      id,
+      id_product
+    );
     response.status(200).json({
-      message: `Producto: ${id_prod} borrado del carrito: ${id_cart} con éxito`,
+      message: `Se ha incrementado con éxito la cantidad del producto: ${id_product} en el carrito: ${id}`,
+      updatedProduct,
     });
   } catch (error) {
-    logger.log(
-      "error",
-      `Hubo un error al borrar un producto del carrito ${error}`
+    response.status(404).json({
+      message: "Hubo un error al incrementar la cantidad del producto",
+    });
+  }
+}
+
+async function decreaseOneProductQuantity(request, response) {
+  try {
+    const { id, id_product } = request.params;
+    const { user } = request.user;
+    const cart = await cartsModel.getOneByIdAndEmail(id, user);
+
+    if (!cart) {
+      return response.status(404).json({
+        message: "Carrito no encontrado",
+      });
+    }
+
+    const isProductInCart = cart.products.find(({ _id }) => _id === id_product);
+
+    if (!isProductInCart) {
+      return response.status(400).json({
+        message: `El producto: ${id_product} no esta presente en el carrito`,
+      });
+    }
+
+    const updatedProduct = await cartsModel.decreaseOneProductQuantity(
+      id,
+      id_product
     );
+    response.status(200).json({
+      message: `Se ha decrementado con éxito la cantidad del producto: ${id_product} en el carrito: ${id}`,
+      updatedProduct,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al decrementar la cantidad del producto",
+    });
+  }
+}
+
+async function deleteOneProduct(request, response) {
+  try {
+    const { id, id_product } = request.params;
+    const { user } = request.user;
+
+    const cart = await cartsModel.getOneByIdAndEmail(id, user);
+
+    if (!cart) {
+      return response.status(404).json({
+        message: "Carrito no encontrado",
+      });
+    }
+
+    const isProductInCart = cart.products.find(({ _id }) => _id === id_product);
+
+    if (!isProductInCart) {
+      return response.status(400).json({
+        message: `El producto: ${id_product} no esta presente en el carrito`,
+      });
+    }
+
+    const deletedProduct = await cartsModel.deleteOneProduct(id, id_product);
+
+    response.status(200).json({
+      message: `Producto: ${id_product} borrado del carrito: ${id} con éxito`,
+      deletedProduct,
+    });
+  } catch (error) {
     response.status(404).json({
       message: "Hubo un error al borrar un producto del carrito",
     });
@@ -128,49 +194,46 @@ function deleteOneProduct(request, response) {
 
 async function checkout(request, response) {
   try {
-    const id = request.params.id_cart;
-    const cart = await cartsDao.getOne(id);
-    const user = await usersDao.findByEmail(cart.user);
+    const id = request.params.id;
+
+    const { user: email } = request.user;
+
+    const cart = await cartsModel.getOneByIdAndEmail(id, email);
+
     if (!cart) {
       return response.status(404).json({
         message: "Carrito no encontrado",
       });
     }
+
+    if (!cart.products.length) {
+      return response.status(404).json({
+        message:
+          "Su carrito no contiene productos, no puede realizar el checkout",
+      });
+    }
+
+    const user = await usersModel.findByEmail(email);
+
     if (!user) {
       return response.status(404).json({
         message: "Usuario del carrito no encontrado",
       });
     }
-    const { products } = cart;
-    await messageHelper.sendEmail(
-      `Nuevo pedido de: ${user.name}. Tel: ${user.phone}`,
-      "Nueva compra",
-      `<div>
-    <h1>Nuevo pedido de: ${user.name}. Tel: ${user.phone}</h1>
-    <h2>Productos del carrito:</h2>
-      <ul>
-          ${products.map((product) => {
-            return `<li>Product: ${product.id}</li>`;
-          })}
-      </ul>
-    </div>`
-    );
-    await messageHelper.sendSMS(
-      `¡Gracias por comprar con nosotros, ${user.name}! Su pedido está siendo procesado`,
-      user.phone
-    );
+
+    const order = await ordersModel.generateNewOrder(user.email, cart.products);
+
+    await messageHelper.sendNewOrderEmail(user, order.items);
+
+    await messageHelper.sendNewOrderSMS(user);
+
+    await cartsModel.emptyCartProducts(id);
+
     response.status(200).json({
       message: `Checkout realizado con éxito`,
-      receipt: {
-        user: user.email,
-        products,
-      },
+      order,
     });
   } catch (error) {
-    logger.log(
-      "error",
-      `Hubo un error al realizar el checkout del carrito ${error}`
-    );
     response.status(404).json({
       message: "Hubo un error al realizar el checkout del carrito",
     });
@@ -178,10 +241,11 @@ async function checkout(request, response) {
 }
 
 module.exports = {
-  add,
   deleteOne,
   getAllProducts,
-  addManyProducts,
+  addOneProduct,
+  increaseOneProductQuantity,
+  decreaseOneProductQuantity,
   deleteOneProduct,
   checkout,
 };

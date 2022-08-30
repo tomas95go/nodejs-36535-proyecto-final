@@ -1,17 +1,12 @@
-const logger = require(`${__dirname}/winston.helper`);
-function checkRole(request, response, next) {
-  const isAdmin = true;
+const path = require("path");
+const usersModel = require(path.join(__dirname, "..", "models/users.model"));
+
+async function checkRole(user) {
+  const isAdmin = await usersModel.checkPrivileges(user);
   if (!isAdmin) {
-    logger.log(
-      "warn",
-      `Operación: ${request.method} en ruta ${request.originalUrl} no autorizada`
-    );
-    return response.status(401).json({
-      error: -1,
-      message: `Operación: ${request.method} en ruta ${request.originalUrl} no autorizada`,
-    });
+    return false;
   }
-  next();
+  return true;
 }
 
 module.exports = { checkRole };

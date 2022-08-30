@@ -1,21 +1,20 @@
 const path = require("path");
-const productsDao = require(path.join(__dirname, "..", `daos/products.dao`));
-const logger = require(path.join(__dirname, "..", "helpers/winston.helper"));
+const productsModel = require(path.join(
+  __dirname,
+  "..",
+  `models/products.model`
+));
 
 async function getAll(request, response) {
   try {
-    const products = await productsDao.getAll();
+    const products = await productsModel.getAll();
     response.status(200).json({
-      message: "Lista de álbumes recuperada con éxito",
+      message: "Lista de productos recuperada con éxito",
       products,
     });
   } catch (error) {
-    logger.log(
-      "error",
-      `Hubo un error al recuperar la lista de álbumes ${error}`
-    );
     response.status(404).json({
-      message: "Hubo un error al recuperar la lista de álbumes",
+      message: "Hubo un error al recuperar la lista de productos",
     });
   }
 }
@@ -23,20 +22,40 @@ async function getAll(request, response) {
 async function getOne(request, response) {
   try {
     const id = request.params.id;
-    const product = await productsDao.getOne(id);
+    const product = await productsModel.getOne(id);
     if (!product) {
       return response.status(404).json({
-        message: "Álbum no encontrado",
+        message: "Producto no encontrado",
       });
     }
     response.status(200).json({
-      message: "Álbum encontrado con éxito",
+      message: "Producto encontrado con éxito",
       product,
     });
   } catch (error) {
-    logger.log("error", `Hubo un error al buscar el álbum ${error}`);
     response.status(404).json({
-      message: "Hubo un error al buscar el álbum",
+      message: "Hubo un error al buscar el producto",
+    });
+  }
+}
+
+async function getAllByCategory(request, response) {
+  try {
+    const category = request.params.category;
+    const products = await productsModel.getAllByCategory(category);
+    if (!products.length) {
+      return response.status(404).json({
+        message: `No existen productos de la categoría: ${category}`,
+      });
+    }
+
+    response.status(200).json({
+      message: `Lista de productos de la categoría: ${category}, recuperada con éxito`,
+      products,
+    });
+  } catch (error) {
+    response.status(404).json({
+      message: "Hubo un error al listar los productos por su categoría",
     });
   }
 }
@@ -44,54 +63,14 @@ async function getOne(request, response) {
 async function addOne(request, response) {
   try {
     const newProduct = request.body;
-    newProduct.active = true;
-    newProduct.timestamp = new Date().toLocaleString("es-AR");
-    const addedProduct = await productsDao.addOne(newProduct);
+    const addedProduct = await productsModel.addOne(newProduct);
     response.status(201).json({
-      message: "Nuevo álbum creado con éxito",
+      message: "Producto creado con éxito",
       addedProduct,
     });
   } catch (error) {
-    logger.log("error", `Hubo un error al crear el álbum ${error}`);
     response.status(404).json({
-      message: "Hubo un error al crear el álbum",
-    });
-  }
-}
-
-async function addMany(request, response) {
-  try {
-    const newProducts = request.body;
-
-    const addedProductsPromises = newProducts.map(async (newProduct) => {
-      newProduct.active = true;
-      newProduct.timestamp = new Date().toLocaleString("es-AR");
-      const addedProduct = await productsDao.addOne(newProduct);
-      return addedProduct;
-    });
-
-    Promise.allSettled(addedProductsPromises).then((promiseResults) => {
-      const addedProducts = [];
-      promiseResults.forEach((promiseResult) =>
-        addedProducts.push(promiseResult.value)
-      );
-      let message = "";
-
-      if (addedProducts.length > 1) {
-        message = "Nuevos álbumes creados con éxito";
-      } else {
-        message = "Nuevo álbum creado con éxito";
-      }
-
-      response.status(201).json({
-        message,
-        addedProducts,
-      });
-    });
-  } catch (error) {
-    logger.log("error", `Hubo un error al crear muchos álbumes ${error}`);
-    response.status(404).json({
-      message: "Hubo un error al crear muchos álbumes",
+      message: "Hubo un error al crear el producto",
     });
   }
 }
@@ -100,20 +79,19 @@ async function updateOne(request, response) {
   try {
     const id = request.params.id;
     const newProductData = request.body;
-    const updatedProduct = await productsDao.updateOne(id, newProductData);
+    const updatedProduct = await productsModel.updateOne(id, newProductData);
     if (!updatedProduct) {
       return response.status(404).json({
-        message: "Álbum no encontrado",
+        message: "Producto no encontrado",
       });
     }
     response.status(200).json({
-      message: "Álbum modificado con éxito",
+      message: "Producto modificado con éxito",
       updatedProduct,
     });
   } catch (error) {
-    logger.log("error", `Hubo un error al actualizar el álbum ${error}`);
     response.status(404).json({
-      message: "Hubo un error al actualizar el álbum",
+      message: "Hubo un error al modificar el producto",
     });
   }
 }
@@ -121,20 +99,19 @@ async function updateOne(request, response) {
 async function deleteOne(request, response) {
   try {
     const id = request.params.id;
-    const softDeletedProduct = await productsDao.deleteOne(id);
+    const softDeletedProduct = await productsModel.deleteOne(id);
     if (!softDeletedProduct) {
       return response.status(404).json({
-        message: "Álbum no encontrado",
+        message: "Producto no encontrado",
       });
     }
     response.status(200).json({
-      message: "Álbum borrado con éxito",
+      message: "Producto borrado con éxito",
       softDeletedProduct,
     });
   } catch (error) {
-    logger.log("error", `Hubo un error al borrar el álbum ${error}`);
     response.status(404).json({
-      message: "Hubo un error al borrar el álbum",
+      message: "Hubo un error al borrar el producto",
     });
   }
 }
@@ -142,8 +119,8 @@ async function deleteOne(request, response) {
 module.exports = {
   getAll,
   getOne,
+  getAllByCategory,
   addOne,
-  addMany,
   updateOne,
   deleteOne,
 };

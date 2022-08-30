@@ -1,64 +1,33 @@
-const express = require("express");
 const path = require("path");
-const passport = require("passport");
-const session = require("express-session");
 const http = require("http");
-const cluster = require("cluster");
-const cpuQuantity = require("os").cpus().length;
-require("dotenv").config();
+const { Server } = require("socket.io");
 
-const passportHelper = require(`${__dirname}/helpers/passport.helper`);
-const logger = require(`${__dirname}/helpers/winston.helper`);
-const productsRouter = require(`${__dirname}/routes/products.route`);
-const cartsRouter = require(`${__dirname}/routes/carts.route`);
-const registerRouter = require(`${__dirname}/routes/register.route`);
-const loginRouter = require(`${__dirname}/routes/login.route`);
-const logoutRouter = require(`${__dirname}/routes/logout.route`);
-const routeHelper = require(`${__dirname}/helpers/route.helper`);
-const checkoutRouter = require(`${__dirname}/routes/checkout.route`);
-const profileRouter = require(`${__dirname}/routes/profile.route`);
-const database = require(path.join(__dirname, "/config"));
-
-const app = express();
+const app = require(path.join(__dirname, "/app"));
 const server = http.createServer(app);
+const io = new Server(server);
+
+const database = require(path.join(__dirname, "/config"));
 const PORT = process.env.PORT || 8080;
-app.use(express.static("public"));
-app.use(express.json());
-passportHelper.initialize(passport);
-app.use(
-  session({
-    secret: process.env.SECRET_SESSION,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-app.use((request, response, next) => {
-  logger.log("info", `Petición recibida: ${request.method} - ${request.path}`);
-  next();
-});
-app.use(passport.initialize());
-app.use(passport.session());
-app.use("/api/register", registerRouter);
-app.use("/api/login", loginRouter);
-app.use("/api/logout", logoutRouter);
-app.use("/api/productos", productsRouter);
-app.use("/api/carrito", cartsRouter);
-app.use("/api/checkout", checkoutRouter);
-app.use("/api/profile", profileRouter);
-app.use(routeHelper.checkRoute);
 
 database.connect();
 
-if (cluster.isPrimary && process.env.CLUSTER_MODE === true) {
-  console.log("Inicializando en modo cluster");
-  for (let i = 0; i < cpuQuantity; i++) {
-    cluster.fork();
-  }
-  cluster.on("exit", (worker, code, signal) => {
-    console.log(`Worker: ${worker.process.pid} died`);
+const socketioHelper = require(path.join(__dirname, "helpers/socketio.helper"));
+const chatHelper = require(path.join(__dirname, "helpers/chat.helper"));
+
+io.use(socketioHelper.validateJWT);
+
+io.on("connection", (socket) => {
+  const room = socket.handshake.query.room;
+  const chatId = socket.handshake.query["chat-id"];
+  socket.join(room);
+  socket.on("new-customer-message", (msg) => {
+    chatHelper.handleCustomerMessage(io, room, msg, chatId);
   });
-} else {
-  server.listen(PORT, () => {
-    console.log(`App running on port: ${PORT}. URL: http://localhost:${PORT}`);
+  socket.on("new-administrator-message", (msg) => {
+    chatHelper.handleAdministratorMessage(io, room, msg, chatId);
   });
-}
+});
+
+server.listen(PORT, () => {
+  console.log(`App running on port: ${PORT}. URL: http://localhost:${PORT}`);
+});

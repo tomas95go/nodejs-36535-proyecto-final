@@ -1,14 +1,21 @@
 const express = require("express");
 const path = require("path");
-const multer = require("multer");
-const upload = multer();
 const userController = require(path.join(
   __dirname,
   "..",
   "controllers/user.controller"
 ));
+const validatorHelper = require(path.join(
+  __dirname,
+  "..",
+  "helpers/validator.helper"
+));
 const registerRouter = express.Router();
 
-registerRouter.post("/", upload.single("avatar"), userController.register);
+registerRouter.post(
+  "/",
+  validatorHelper.validateUserSchema,
+  userController.register
+);
 
 module.exports = registerRouter;
