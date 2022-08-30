@@ -11,9 +11,6 @@ Por favor, leer antes de ejecutar.
 ## Ejemplo para el .env (En caso de instalar localmente)
 
 ```
-PRODUCTION=false
-LOCAL_BASE_URL="http://localhost:8080"
-CLUSTER_MODE=false
 MONGO_CONNECTION_STRING="my_mongo_connection_string"
 MONGO_DATABASE="my_mongo_database"
 TWILIO_ACCOUNT_SID="my_twilio_account_sid"
