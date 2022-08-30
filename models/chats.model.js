@@ -5,7 +5,7 @@ const Chat = require(path.join(__dirname, "..", "schemas/chat.mongo.schema"));
 async function getAllChats(email) {
   try {
     const chats = await Chat.find({
-      emitter: email,
+      $or: [{ emitter: email }, { receiver: email }],
     }).exec();
     return chats;
   } catch (error) {
