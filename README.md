@@ -14,15 +14,20 @@ Por favor, leer antes de ejecutar.
 PRODUCTION=false
 LOCAL_BASE_URL="http://localhost:8080"
 CLUSTER_MODE=false
-SECRET_SESSION="my_secret_session"
-MONGO_CONNECTION_STRING="my_mongo_atlas_connection_string"
-MONGO_DATABASE="my_database"
+MONGO_CONNECTION_STRING="my_mongo_connection_string"
+MONGO_DATABASE="my_mongo_database"
 TWILIO_ACCOUNT_SID="my_twilio_account_sid"
 TWILIO_AUTH_TOKEN="my_twilio_auth_token"
-PHONE_SID="my_twilio_phone_sid"
-WORK_EMAIL="my_other_email"
-PERSONAL_EMAIL="my_email"
-SENDGRID_API_KEY="my_api_key"
+PHONE_SID="my_phone_sid"
+WORK_EMAIL="my_work_email"
+PERSONAL_EMAIL="my_personal_email"
+SENDGRID_API_KEY="my_sendgrid_api_key"
+JWT_SECRET_KEY="my_jwt_secret_key"
+JWT_EXPIRATION_TIME="my_jwt_expiration_time"
+CLOUDINARY_CLOUD_NAME="my_cloudinary_cloud_name"
+CLOUDINARY_API_KEY="my_cloudinary_api_key"
+CLOUDINARY_API_SECRET="my_cloudinary_api_secret"
+CLOUDINARY_FOLDER="my_cloudinary_folder"
 ```
 
 NOTA: El WORK_EMAIL debe ser diferente al PERSONAL_EMAIL. El PERSONAL_EMAIL es el mail DESTINO, el WORK_EMAIL es el mes que envia el correo. El WORK_EMAIL debe ser un mail
