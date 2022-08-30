@@ -22,11 +22,22 @@ async function handleCustomerMessage(io, room, message, chatId) {
   }
 }
 
-async function handleAdministratorMessage(io, message) {
+async function handleAdministratorMessage(io, room, message, chatId) {
   try {
-    console.log(`handleCustomerMessage: ${message}`);
+    const { user, text } = message;
+    const newAdministratorMessage = {
+      user,
+      message: text,
+    };
+    await chatController.saveAdministratorMessage(
+      newAdministratorMessage,
+      chatId
+    );
+    io.to(room).emit("new-administrator-message-ui", message);
   } catch (error) {
-    console.log(error);
+    io.to(room).emit("new-administrator-message-ui", {
+      error,
+    });
   }
 }
 

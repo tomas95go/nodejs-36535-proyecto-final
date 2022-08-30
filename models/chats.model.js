@@ -52,7 +52,22 @@ async function saveUserMessage(id, message) {
   }
 }
 
-async function sendAdministratorMessage() {}
+async function saveAdministratorMessage(id, message) {
+  try {
+    const updatedChat = await Chat.findByIdAndUpdate(
+      id,
+      {
+        $push: { messages: message },
+      },
+      {
+        new: true,
+      }
+    );
+    return updatedChat;
+  } catch (error) {
+    throw "Hubo un error al guardar el mensaje del administrador";
+  }
+}
 
 async function terminateChatByUser() {}
 
@@ -71,7 +86,7 @@ module.exports = {
   getAllChats,
   createChat,
   saveUserMessage,
-  sendAdministratorMessage,
+  saveAdministratorMessage,
   terminateChatByUser,
   terminateChatByAdministrator,
 };
