@@ -51,6 +51,18 @@ async function findByEmail(email) {
   }
 }
 
+async function checkPrivileges(email) {
+  try {
+    const user = await User.findOne({
+      email: email,
+      admin: true,
+    });
+    return user;
+  } catch (error) {
+    throw "Hubo un error al obtener usuario por email";
+  }
+}
+
 async function findById(id) {
   try {
     const user = await User.findById(id);
@@ -74,4 +86,5 @@ module.exports = {
   findByEmail,
   findById,
   authenticate,
+  checkPrivileges,
 };

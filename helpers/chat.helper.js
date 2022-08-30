@@ -6,6 +6,8 @@ const chatController = require(path.join(
   "controllers/chat.controller"
 ));
 
+const { checkRole } = require(path.join(__dirname, "admin.helper"));
+
 async function handleCustomerMessage(io, room, message, chatId) {
   try {
     const { user, text } = message;
@@ -25,6 +27,10 @@ async function handleCustomerMessage(io, room, message, chatId) {
 async function handleAdministratorMessage(io, room, message, chatId) {
   try {
     const { user, text } = message;
+    const isAdmin = await checkRole(user);
+    if (!isAdmin) {
+      throw "El usuario no tiene privilegios para enviar mensajes como administrador";
+    }
     const newAdministratorMessage = {
       user,
       message: text,
