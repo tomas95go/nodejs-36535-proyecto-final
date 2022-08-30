@@ -15,10 +15,5 @@ chatRouter.use(jwtHelper.verify);
 
 chatRouter.get("/:user", chatController.getAllChats);
 chatRouter.post("/create", chatController.createChat);
-chatRouter.get("/terminate/:chat_id/:user", chatController.terminateChatByUser);
-chatRouter.get(
-  "/terminate/:chat_id/:admnistrator",
-  chatController.terminateChatByAdministrator
-);
 
 module.exports = chatRouter;

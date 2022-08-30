@@ -69,10 +69,6 @@ async function saveAdministratorMessage(id, message) {
   }
 }
 
-async function terminateChatByUser() {}
-
-async function terminateChatByAdministrator() {}
-
 async function getNextRoomNumber() {
   try {
     const nextRoomNumber = await Chat.find().countDocuments({}).exec();
@@ -87,6 +83,4 @@ module.exports = {
   createChat,
   saveUserMessage,
   saveAdministratorMessage,
-  terminateChatByUser,
-  terminateChatByAdministrator,
 };

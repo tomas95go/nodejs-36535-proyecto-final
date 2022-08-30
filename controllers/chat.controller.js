@@ -69,15 +69,9 @@ async function saveAdministratorMessage(message, chatId) {
   }
 }
 
-async function terminateChatByUser(request, response) {}
-
-async function terminateChatByAdministrator(request, response) {}
-
 module.exports = {
   getAllChats,
   createChat,
   saveUserMessage,
   saveAdministratorMessage,
-  terminateChatByUser,
-  terminateChatByAdministrator,
 };
